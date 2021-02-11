@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WEm64jJUY87PwMxgFhDXtunIp3cZmIKVlcqphOVV+tR4vfL9jNhoWec6RcwpqResRactsIa2iH0JePV13XGgng==",
+  "success": true,
+  "projectFilePath": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits\\ForestSpirits.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\benja\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\benja\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
