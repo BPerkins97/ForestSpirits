@@ -1,8 +1,13 @@
 ﻿using System;
+using ForestSpirits;
 
-namespace ForestSpiritsPersistence
+namespace PersistenceNamespace
 {
-    public class Class1
+    public class Persistence : HelloWorldPersistence
     {
+        public string loadHelloWorld()
+        {
+            return "Hello World";
+        }
     }
 }

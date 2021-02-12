@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence\\ForestSpiritsPersistence.csproj": {}
+    "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence.csproj": {}
   },
   "projects": {
-    "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence\\ForestSpiritsPersistence.csproj": {
+    "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence\\ForestSpiritsPersistence.csproj",
+        "projectUniqueName": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence.csproj",
         "projectName": "ForestSpiritsPersistence",
-        "projectPath": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence\\ForestSpiritsPersistence.csproj",
+        "projectPath": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence.csproj",
         "packagesPath": "C:\\Users\\benja\\.nuget\\packages\\",
-        "outputPath": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence\\obj\\",
+        "outputPath": "D:\\Repository\\ForestSpirits\\persistence\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\benja\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits\\ForestSpirits.csproj",
+      "projectUniqueName": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits.csproj",
       "projectName": "ForestSpirits",
-      "projectPath": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits\\ForestSpirits.csproj",
+      "projectPath": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits.csproj",
       "packagesPath": "C:\\Users\\benja\\.nuget\\packages\\",
-      "outputPath": "D:\\Repository\\ForestSpirits\\business\\ForestSpirits\\obj\\",
+      "outputPath": "D:\\Repository\\ForestSpirits\\business\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\benja\\AppData\\Roaming\\NuGet\\NuGet.Config",
