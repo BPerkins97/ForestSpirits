@@ -13,6 +13,7 @@ namespace ForestSpirits
 
         public String getMessage ()
         {
+            Console.WriteLine("Load Hello World");
             return persistence.loadHelloWorld();
         }
     }
