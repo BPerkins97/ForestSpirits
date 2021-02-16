@@ -2,27 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ForestSpirits;
-using PersistenceNamespace;
 using UnityEngine.UI;
 
 public class HelloWorld : MonoBehaviour
 {
-    public Text mytext = null;
-    public Button someButton = null;
+    public Text co2Level = null;
+    public Button baumBauen = null;
 
-    private HelloWorldBusiness business;
-    private Persistence persistence = new Persistence();
-
-    public HelloWorld ()
-    {
-        business = new HelloWorldBusiness(persistence);
-    }
-
+    private BaumPflanzenUseCase baum;
 
     public void changeText()
     {
-        mytext.text = business.getMessage();       
+        baum.pflanzeBaum(1);
     }
+
 
     void Update()
     {
@@ -31,12 +24,33 @@ public class HelloWorld : MonoBehaviour
 
     void Start()
     {
-        someButton.onClick.AddListener(changeText);
+        Co2LevelAnzeigeInUnity co2Display = new Co2LevelAnzeigeInUnity(co2Level);
+        baum = new BaumPflanzenUseCase(co2Display);
+        baumBauen.onClick.AddListener(changeText);
         // instantiate button from prefab
         //GameObject go = (GameObject)Instantiate(Resources.Load("Button"));
         // get button component from game object
         //Button myBtn = go.GetComponent<Button>();
         // get button text component in children and set the text property
         //mytext = myBtn.GetComponentInChildren<Text>();
+    }
+}
+
+public class Co2LevelAnzeigeInUnity : Co2Anzeige {
+    private Text co2LevelDisplay;
+
+    public Co2LevelAnzeigeInUnity (Text co2LevelDisplay)
+    {
+        this.co2LevelDisplay = co2LevelDisplay;
+    }
+
+    public void zeigeCo2Level(int co2Level)
+    {
+        co2LevelDisplay.text = "" + co2Level;
+    }
+
+    public void zeigeWinAn()
+    {
+        co2LevelDisplay.text = "Fuckers";
     }
 }

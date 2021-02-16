@@ -2,24 +2,41 @@
 
 namespace ForestSpirits
 {
-    public class HelloWorldBusiness
+    public class BaumPflanzenUseCase
     {
-        private HelloWorldPersistence persistence;
+        private const int BAUM_CO2_WERT = 20;
+        private int co2 = 5000;
+        private int anzahlBaum = 1;
+        private Co2Anzeige co2Anzeige;
 
-        public HelloWorldBusiness(HelloWorldPersistence persistence)
+        public BaumPflanzenUseCase(Co2Anzeige co2Anzeige)
         {
-            this.persistence = persistence;
+            this.co2Anzeige = co2Anzeige;
         }
 
-        public String getMessage ()
+        public void pflanzeBaum(int anzahlBaum)
         {
-            Console.WriteLine("Load Hello World");
-            return persistence.loadHelloWorld();
+            this.anzahlBaum += anzahlBaum;
+            int neuesLevel = berechneNeuesCo2Level();
+            if (neuesLevel < 4500)
+            {
+                this.co2Anzeige.zeigeWinAn();
+            }
+            else
+            {
+                this.co2Anzeige.zeigeCo2Level(neuesLevel);
+            }
+        }
+
+        private int berechneNeuesCo2Level()
+        {
+            return co2 - anzahlBaum * BAUM_CO2_WERT;
         }
     }
 
-    public interface HelloWorldPersistence
+    public interface Co2Anzeige
     {
-        String loadHelloWorld();
+        void zeigeCo2Level(int co2Level);
+        void zeigeWinAn();
     }
 }
