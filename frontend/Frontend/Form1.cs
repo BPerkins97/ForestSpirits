@@ -6,6 +6,9 @@ namespace Frontend
 {
     public partial class Form1 : Form
     {
+        private const int BOARD_WIDTH = 20;
+        private const int BOARD_HEIGHT = 10;
+
         public Form1()
         {
             InitializeComponent();
@@ -22,24 +25,15 @@ namespace Frontend
             float heightPixel = convertPixelToPoint(image.Height);
             float heightDiff = (float)(heightPixel * 0.75);
 
-            for (float y = 0;y < screenSize.Height;y += (float)(heightPixel * 1.5)) {
-                for (float x = 0; x < screenSize.Width; x += widthPixel)
+            for (float y = 0;y < BOARD_HEIGHT / 2;y++) {
+                for (float x = 0; x < BOARD_WIDTH; x++)
                 {
-                    graphics.DrawImage(image, x, y);
+                    graphics.DrawImage(image, x * widthPixel, y * 2 * heightDiff);
+                    graphics.DrawImage(image, x * widthPixel + widthPixel / 2, y * 2 * heightDiff + heightDiff);
                 }
             }
-            for (float y = heightDiff; y < screenSize.Height; y += (float)(heightPixel * 1.5))
-            {
-                for (float x = (float)(widthPixel / 2.0); x < screenSize.Width; x += widthPixel)
-                {
-                    graphics.DrawImage(image, x - 1, y);
-                }
-            }
-
-
-
-
         }
+
         private float convertPixelToPoint(int pixel)
         {
             return pixel * 96 / 72;
