@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "dgQzoajAHghU9oXwE5gYzb1mZ64eQJ0MFvfNCFOUp8GDFcW/dKjJYTFmiHr4y+aJaUwKH+7KZhT2q0Kyk+HNEA==",
+  "success": true,
+  "projectFilePath": "D:\\Repository\\ForestSpirits\\persistence\\ForestSpiritsPersistence.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\benja\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\benja\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

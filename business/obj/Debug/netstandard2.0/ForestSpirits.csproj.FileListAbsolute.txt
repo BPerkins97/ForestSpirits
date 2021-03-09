@@ -1,0 +1,9 @@
+D:\Repository\ForestSpirits\business\bin\Debug\netstandard2.0\ForestSpirits.deps.json
+D:\Repository\ForestSpirits\business\bin\Debug\netstandard2.0\ForestSpirits.dll
+D:\Repository\ForestSpirits\business\bin\Debug\netstandard2.0\ForestSpirits.pdb
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.csprojAssemblyReference.cache
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.AssemblyInfoInputs.cache
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.AssemblyInfo.cs
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.csproj.CoreCompileInputs.cache
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.dll
+D:\Repository\ForestSpirits\business\obj\Debug\netstandard2.0\ForestSpirits.pdb

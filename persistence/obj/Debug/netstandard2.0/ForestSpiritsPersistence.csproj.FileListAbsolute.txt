@@ -1,0 +1,12 @@
+D:\Repository\ForestSpirits\persistence\bin\Debug\netstandard2.0\ForestSpiritsPersistence.deps.json
+D:\Repository\ForestSpirits\persistence\bin\Debug\netstandard2.0\ForestSpiritsPersistence.dll
+D:\Repository\ForestSpirits\persistence\bin\Debug\netstandard2.0\ForestSpiritsPersistence.pdb
+D:\Repository\ForestSpirits\persistence\bin\Debug\netstandard2.0\ForestSpirits.dll
+D:\Repository\ForestSpirits\persistence\bin\Debug\netstandard2.0\ForestSpirits.pdb
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.csprojAssemblyReference.cache
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.AssemblyInfoInputs.cache
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.AssemblyInfo.cs
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.csproj.CoreCompileInputs.cache
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.csproj.CopyComplete
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.dll
+D:\Repository\ForestSpirits\persistence\obj\Debug\netstandard2.0\ForestSpiritsPersistence.pdb
