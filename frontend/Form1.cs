@@ -15,6 +15,16 @@ namespace Frontend
             InitializeComponent();
         }
 
+        public void zeigeSpielesammlungAn()
+        {
+            Spielesammlung liste = getSpielesammlungen()
+        }
+
+        public Spielesammlung GetSpielesammlung()
+        {
+            return Spielesammlung();
+        }
+
         private void drawBoard()
         {
             Graphics graphics = this.CreateGraphics();
