@@ -15,20 +15,11 @@ namespace Frontend
             InitializeComponent();
         }
 
-        public void zeigeSpielesammlungAn()
-        {
-            Spielesammlung liste = getSpielesammlungen()
-        }
-
-        public Spielesammlung GetSpielesammlung()
-        {
-            return Spielesammlung();
-        }
-
         private void drawBoard()
         {
             Graphics graphics = this.CreateGraphics();
-            Image image = Image.FromFile("D:\\Repository\\ForestSpirits\\frontend\\static\\feld_mit_rand.png");
+            string path = Application.StartupPath + @"\static\feld_mit_rand.png";
+            Image image = Image.FromFile(path);
 
             float fieldWidth = convertPixelToPoint(image.Width);
             float fieldHeight = convertPixelToPoint(image.Height);
