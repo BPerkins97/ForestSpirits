@@ -8,11 +8,51 @@ using System.Threading.Tasks;
 // Only works for perfect hexagons
 namespace Frontend
 {
+    class Board
+    {
+        public readonly int rows;
+        public readonly int columns;
+        private FieldMapper mapper;
+        private Image image;
+
+        public Board(int rows, int columns)
+        {
+            this.rows = rows;
+            this.columns = columns;
+            image = FileUtils.loadImage("feld_mit_rand.png");
+            mapper = new FieldMapper(rows, columns, MathUtils.convertPixelToPoint(image.Width), MathUtils.convertPixelToPoint(image.Height));
+        }
+
+        public void draw(Graphics graphics)
+        { 
+            float heightDiff = (float)(mapper.fieldHeight * 0.75);
+
+            for (float y = 0; y < rows / 2.0; y++) // This float: BOARD_HEIGHT / 2.0 is on purpose!
+            {
+                for (float x = 0; x < columns; x++)
+                {
+                    graphics.DrawImage(image, x * mapper.fieldWidth, y * 2 * heightDiff);
+                }
+            }
+            for (float y = 0; y < rows / 2; y++)
+            {
+                for (float x = 0; x < columns; x++)
+                {
+                    graphics.DrawImage(image, x * mapper.fieldWidth + mapper.fieldWidth / 2, y * 2 * heightDiff + heightDiff);
+                }
+            }
+        }
+
+        public Coordinate getCoordinates(float x, float y)
+        {
+            return mapper.pointToCoordinate(x, y);
+        }
+    }
     class FieldMapper {
-        private float fieldWidth;
-        private float fieldHeight;
-        private int rows;
-        private int columns;
+        public readonly float fieldWidth;
+        public readonly float fieldHeight;
+        public readonly int rows;
+        public readonly int columns;
 
         public FieldMapper(int rows, int columns, float fieldWidth, float fieldHeight) 
         {
@@ -22,7 +62,7 @@ namespace Frontend
             this.columns = columns;
         }
 
-        public Coordinate pointToCoordinate(PointF point)
+        public Coordinate pointToCoordinate(float x, float y)
         {
             bool found = false;
             Coordinate result = new Coordinate(-1, -1);
@@ -30,7 +70,7 @@ namespace Frontend
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    if (!found && isSelected(j, i, point.X, point.Y))
+                    if (!found && isSelected(j, i, x, y))
                     {
                         result = new Coordinate(i, j);
                         found = true;
