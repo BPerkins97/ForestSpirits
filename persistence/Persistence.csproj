@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="ForestSpirits">
-      <HintPath>..\business\bin\Debug\netstandard2.0\ForestSpirits.dll</HintPath>
+    <Reference Include="Business">
+      <HintPath>..\business\bin\Debug\netstandard2.0\Business.dll</HintPath>
     </Reference>
   </ItemGroup>
 

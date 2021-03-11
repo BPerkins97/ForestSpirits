@@ -4,19 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Frontend
+namespace ForestSpirits.Frontend
 {
-    static class Program
-    {
-        /// <summary>
-        /// Der Haupteinstiegspunkt für die Anwendung.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ForestSpirits());
-        }
-    }
+	internal static class Program
+	{
+		/// <summary>
+		/// Der Haupteinstiegspunkt für die Anwendung.
+		/// </summary>
+		[STAThread]
+		private static void Main()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new Spielfenster());
+		}
+	}
 }
