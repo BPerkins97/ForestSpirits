@@ -12,9 +12,4 @@ namespace ForestSpirits.Business
 			this.Co2Level = START_CO2;
 		}
 	}
-
-	public interface Co2AnzeigeInterface
-	{
-		void zeigeCo2Level(int co2Level);
-	}
 }
