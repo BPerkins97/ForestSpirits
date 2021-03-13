@@ -31,6 +31,8 @@ namespace ForestSpirits.Frontend
 
 	internal class MathUtils
 	{
+		public static Random random = new Random();
+
 		public static float convertPixelToPoint(float pixel)
 		{
 			return pixel * 96 / 72;

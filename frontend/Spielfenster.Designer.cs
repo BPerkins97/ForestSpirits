@@ -34,6 +34,7 @@ namespace ForestSpirits.Frontend
             this.lCo2LevelText = new System.Windows.Forms.Label();
             this.lCo2LevelWert = new System.Windows.Forms.Label();
             this.sonne = new System.Windows.Forms.Button();
+            this.wasser = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lSpielzeitText
@@ -76,12 +77,23 @@ namespace ForestSpirits.Frontend
             // 
             this.sonne.AllowDrop = true;
             this.sonne.BackColor = System.Drawing.Color.Yellow;
-            this.sonne.Location = new System.Drawing.Point(12, 398);
+            this.sonne.Location = new System.Drawing.Point(12, 354);
             this.sonne.Name = "sonne";
-            this.sonne.Size = new System.Drawing.Size(63, 63);
+            this.sonne.Size = new System.Drawing.Size(108, 45);
             this.sonne.TabIndex = 4;
             this.sonne.Text = "sonne";
             this.sonne.UseVisualStyleBackColor = false;
+            // 
+            // wasser
+            // 
+            this.wasser.AllowDrop = true;
+            this.wasser.BackColor = System.Drawing.Color.Aqua;
+            this.wasser.Location = new System.Drawing.Point(12, 416);
+            this.wasser.Name = "wasser";
+            this.wasser.Size = new System.Drawing.Size(108, 45);
+            this.wasser.TabIndex = 5;
+            this.wasser.Text = "button1";
+            this.wasser.UseVisualStyleBackColor = false;
             // 
             // Spielfenster
             // 
@@ -89,6 +101,7 @@ namespace ForestSpirits.Frontend
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(730, 473);
+            this.Controls.Add(this.wasser);
             this.Controls.Add(this.sonne);
             this.Controls.Add(this.lCo2LevelWert);
             this.Controls.Add(this.lCo2LevelText);
@@ -111,6 +124,7 @@ namespace ForestSpirits.Frontend
         private System.Windows.Forms.Label lCo2LevelText;
         private System.Windows.Forms.Label lCo2LevelWert;
         private System.Windows.Forms.Button sonne;
+        private System.Windows.Forms.Button wasser;
     }
 }
 

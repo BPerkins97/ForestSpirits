@@ -10,15 +10,17 @@ namespace ForestSpirits.Frontend
 		private const int IMAGE_HEIGHT = (int)(IMAGE_WIDTH * WIDTH_TO_HEIGHT);
 		public readonly int rows;
 		public readonly int columns;
+		private float width;
+		private float height;
 		private FieldMapper mapper;
-		private Image image;
+		private Image feldImg;
 
 		public Board(int rows, int columns)
 		{
 			this.rows = rows;
 			this.columns = columns;
-			image = FileUtils.loadImage("Zweieck.png");
-			image = FileUtils.resizeImage(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+			feldImg = FileUtils.loadImage("Zweieck.png");
+			feldImg = FileUtils.resizeImage(feldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 			mapper = new FieldMapper(rows, columns, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
@@ -29,14 +31,22 @@ namespace ForestSpirits.Frontend
 			{
 				for (float x = 0; x < columns; x++)
 				{
-					graphics.DrawImage(image, x * mapper.fieldWidth, y * 2 * heightDiff);
+					float xPixel = x * mapper.fieldWidth;
+					width = xPixel + IMAGE_WIDTH > width ? xPixel + IMAGE_WIDTH : width;
+					float yPixel = y * 2 * heightDiff;
+					height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
+					graphics.DrawImage(feldImg, xPixel, yPixel);
 				}
 			}
 			for (float y = 0; y < rows / 2; y++)
 			{
 				for (float x = 0; x < columns; x++)
 				{
-					graphics.DrawImage(image, x * mapper.fieldWidth + mapper.fieldWidth / 2, y * 2 * heightDiff + heightDiff);
+					float xPixel = x * mapper.fieldWidth + mapper.fieldWidth / 2;
+					width = xPixel + IMAGE_WIDTH > width ? xPixel + IMAGE_WIDTH : width;
+					float yPixel = y * 2 * heightDiff + heightDiff;
+					height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
+					graphics.DrawImage(feldImg, xPixel, yPixel);
 				}
 			}
 		}
@@ -45,6 +55,11 @@ namespace ForestSpirits.Frontend
 		{
 			return mapper.pointToCoordinate(x, y);
 		}
+
+		public SizeF getSize()
+        {
+			return new SizeF(width, height);
+        }
 	}
 
 	internal class FieldMapper
