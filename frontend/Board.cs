@@ -85,12 +85,19 @@ namespace ForestSpirits.Frontend
 			float xBase = y % 2 == 1 ? fieldWidth / 2 : 0;
 			PointF lowerLeft = new PointF(xBase + x * fieldWidth, (float)((y + 1) * 0.75 * fieldHeight));
 			PointF lower = new PointF(xBase + fieldWidth / 2 + x * fieldWidth, (float)(fieldHeight + y * 0.75 * fieldHeight));
+			PointF lowerRight = new PointF(xBase + x * fieldWidth + fieldWidth, (float)((y + 1) * 0.75 * fieldHeight));
+
+
+			if (actualX > xBase + fieldWidth + x * fieldWidth || actualX < xBase + x * fieldWidth)
+            {
+				return false;
+            }
 
 			float steigung = (lower.Y - lowerLeft.Y) / (lower.X - lowerLeft.X);
 			float basis = steigung * lower.X * -1 + lower.Y;
 
 			float shouldBeY = steigung * actualX + basis;
-			if (actualY > shouldBeY)
+			if (actualY > shouldBeY || actualY < shouldBeY - fieldHeight)
 			{
 				return false;
 			}
@@ -99,15 +106,11 @@ namespace ForestSpirits.Frontend
 			basis = steigung * lower.X * -1 + lower.Y;
 
 			shouldBeY = steigung * actualX + basis;
-			if (actualY > shouldBeY)
+			if (actualY > shouldBeY || actualY < shouldBeY - fieldHeight)
 			{
 				return false;
 			}
 
-			if (actualX > xBase + fieldWidth + x * fieldWidth)
-			{
-				return false;
-			}
 			return true;
 		}
 	}
