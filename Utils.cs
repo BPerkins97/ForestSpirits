@@ -17,6 +17,16 @@ namespace ForestSpirits.Frontend
 			string path = RESOURCES_PATH + imageName;
 			return Image.FromFile(path);
 		}
+
+		public static Image resizeImage(Image imgToResize, int width, int height)
+		{
+			return new Bitmap(imgToResize, new Size(width, height));
+		}
+
+		public static Image resizeImage(Image imgToResize, float width, float height)
+		{
+			return resizeImage(imgToResize, (int)width, (int)height);
+		}
 	}
 
 	internal class MathUtils
