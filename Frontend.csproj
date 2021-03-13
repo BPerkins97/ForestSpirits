@@ -47,18 +47,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="FieldMapper.cs" />
-    <Compile Include="Spielfenster.cs">
+    <Compile Include="business\GameWindow.cs" />
+    <Compile Include="business\GameEngine.cs" />
+    <Compile Include="business\Co2Manager.cs" />
+    <Compile Include="frontend\Utils.cs" />
+    <Compile Include="frontend\Board.cs" />
+    <Compile Include="frontend\Spielfenster.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Spielfenster.Designer.cs">
+    <Compile Include="frontend\Spielfenster.Designer.cs">
       <DependentUpon>Spielfenster.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="frontend\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Spielfenster.resx">
+    <EmbeddedResource Include="frontend\Spielfenster.resx">
       <DependentUpon>Spielfenster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
