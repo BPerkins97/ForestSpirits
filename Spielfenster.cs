@@ -70,5 +70,15 @@ namespace ForestSpirits.Frontend
 			Coordinate coordinate = board.getCoordinates(e.X, e.Y);
 			MessageBox.Show(coordinate.x + "|" + coordinate.y);
 		}
-	}
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sonne_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
