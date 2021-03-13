@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 // Only works for perfect hexagons
 namespace ForestSpirits.Frontend
 {
 	internal class Board
 	{
+		private const double WIDTH_TO_HEIGHT = 829.0 / 718.0;
+		private const int IMAGE_WIDTH = 111;
+		private const int IMAGE_HEIGHT = (int)(IMAGE_WIDTH * WIDTH_TO_HEIGHT);
 		public readonly int rows;
 		public readonly int columns;
 		private FieldMapper mapper;
@@ -19,15 +17,15 @@ namespace ForestSpirits.Frontend
 		{
 			this.rows = rows;
 			this.columns = columns;
-			image = FileUtils.loadImage("feld_mit_rand.png");
-			mapper = new FieldMapper(rows, columns, MathUtils.convertPixelToPoint(image.Width), MathUtils.convertPixelToPoint(image.Height));
+			image = FileUtils.loadImage("Zweieck.png");
+			image = FileUtils.resizeImage(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+			mapper = new FieldMapper(rows, columns, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
 		public void draw(Graphics graphics)
 		{
 			float heightDiff = (float)(mapper.fieldHeight * 0.75);
-
-			for (float y = 0; y < rows / 2.0; y++) // This float: BOARD_HEIGHT / 2.0 is on purpose!
+			for (float y = 0; y < rows / 2.0; y++) // This float: rows / 2.0 is on purpose!
 			{
 				for (float x = 0; x < columns; x++)
 				{

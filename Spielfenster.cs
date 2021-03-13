@@ -18,7 +18,7 @@ namespace ForestSpirits.Frontend
 		{
 			InitializeComponent();
 
-			this.board = new Board(3, 3);
+			this.board = new Board(9, 16);
 
 			this.initTimer();
 
