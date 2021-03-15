@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +43,17 @@ namespace ForestSpirits.Business
 			lastGameState.inventar.wasser++;
 		}
 
+		public void setzlingPflanzen(BusinessCoordinate location)
+		{
+			//unfinished
+            if (lastGameState.inventar.setzlinge > 0)
+			{
+				lastGameState.inventar.setzlinge--;
+				Setzling newSetzling = new Setzling(location);
+				lastGameState.pflanzenRegister.setzlinge.Add(newSetzling);
+			}
+		}
+
 		private GameState update()
 		{
 			GameState gameState = new GameState();
@@ -51,6 +62,7 @@ namespace ForestSpirits.Business
 			gameState.sonneZumSammeln = (lastGameState.sonneZumSammeln || random.NextDouble() < 0.1);
 			gameState.wasserZumSammeln = (lastGameState.wasserZumSammeln || random.NextDouble() < 0.1);
 			gameState.inventar = lastGameState.inventar;
+			gameState.pflanzenRegister = lastGameState.pflanzenRegister;
 
 			return gameState;
 		}

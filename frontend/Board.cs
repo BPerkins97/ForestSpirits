@@ -56,10 +56,26 @@ namespace ForestSpirits.Frontend
 			return mapper.pointToCoordinate(x, y);
 		}
 
+		public Point getPoint(Coordinate coordinate)
+		{
+			//unfinished
+            int x = coordinate.x + 1;
+			int y = coordinate.y;
+
+			float heightDiff = (float)(mapper.fieldHeight * 0.75);
+			float xPixel = x * mapper.fieldWidth;
+			//int
+			float width = xPixel + 111 > this.width ? xPixel + IMAGE_WIDTH : this.width;
+			float yPixel = y * 2 * heightDiff;
+			//int
+			float height = yPixel + IMAGE_HEIGHT > this.height ? yPixel + IMAGE_HEIGHT : this.height;
+			return new Point((int)(xPixel), (int)(yPixel));
+		}
+
 		public SizeF getSize()
-        {
+		{
 			return new SizeF(width, height);
-        }
+		}
 	}
 
 	internal class FieldMapper
@@ -95,6 +111,28 @@ namespace ForestSpirits.Frontend
 			return result;
 		}
 
+		public Point coordinateToPoint(Coordinate coordinate)
+		{
+			//int x = coordinate.x;
+			//int y = coordinate.y;
+
+			//float heightDiff = (float)(this.fieldHeight * 0.75);
+			//float xPixel = x * this.fieldWidth;
+			//int width = xPixel + 111 > width ? xPixel + IMAGE_WIDTH : width;
+			//float yPixel = y * 2 * heightDiff;
+			//int height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
+			//graphics.DrawImage(feldImg, xPixel, yPixel);
+
+			//float xPixel = x * this.fieldWidth;
+			////width = xPixel + IMAGE_WIDTH > width ? xPixel + IMAGE_WIDTH : width;
+			//float heightDiff = (float)(this.fieldHeight * 0.75);
+			//float yPixel = y * 2 * heightDiff;
+			////height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
+			////graphics.DrawImage(feldImg, xPixel, yPixel);
+			//return new Point((int)(xPixel), (int)(yPixel));
+			return new Point();
+		}
+
 		private bool isSelected(int x, int y, float actualX, float actualY)
 		{
 			float xBase = y % 2 == 1 ? fieldWidth / 2 : 0;
@@ -102,11 +140,10 @@ namespace ForestSpirits.Frontend
 			PointF lower = new PointF(xBase + fieldWidth / 2 + x * fieldWidth, (float)(fieldHeight + y * 0.75 * fieldHeight));
 			PointF lowerRight = new PointF(xBase + x * fieldWidth + fieldWidth, (float)((y + 1) * 0.75 * fieldHeight));
 
-
 			if (actualX > xBase + fieldWidth + x * fieldWidth || actualX < xBase + x * fieldWidth)
-            {
+			{
 				return false;
-            }
+			}
 
 			float steigung = (lower.Y - lowerLeft.Y) / (lower.X - lowerLeft.X);
 			float basis = steigung * lower.X * -1 + lower.Y;

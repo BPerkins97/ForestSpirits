@@ -15,9 +15,12 @@ namespace ForestSpirits.Frontend
 		private Point sonneLocation;
 		private Point wasserLocation;
 		private int sonneWidth = 100;
+		private int pflanzeWidth = 40;
 		private GameState lastGameState;
 		private Image sonneImg;
 		private Image wasserImg;
+		private Image setzlingImg;
+		private bool setzlingReady = false;
 
 		public Spielfenster()
 		{
@@ -30,6 +33,8 @@ namespace ForestSpirits.Frontend
 			sonneImg = FileUtils.resizeImage(sonneImg, sonneWidth, sonneWidth);
 			wasserImg = FileUtils.loadImage("wasser.png");
 			wasserImg = FileUtils.resizeImage(wasserImg, sonneWidth, sonneWidth);
+			setzlingImg = FileUtils.loadImage("setzling.png");
+			setzlingImg = FileUtils.resizeImage(setzlingImg, pflanzeWidth, pflanzeWidth);
 		}
 
 		public void showGameState(GameState gameState)
@@ -56,8 +61,19 @@ namespace ForestSpirits.Frontend
 				graphics.DrawImage(wasserImg, wasserLocation);
 			}
 
+			foreach (Setzling setzling in gameState.pflanzenRegister.setzlinge)
+			{
+				Point location = board.getPoint(new Coordinate(setzling.location.x, setzling.location.y));
+				//Point location = new Point(setzling.location.x, setzling.location.y);
+				graphics.DrawImage(setzlingImg, location);
+				//graphics.DrawImage(setzlingImg, new Point(111 / 2, 111 / 2));
+				Console.WriteLine("test");
+			}
+
+			// Inventar befüllen
 			this.sonne.Text = "Sonne " + gameState.inventar.sonne;
 			this.wasser.Text = "Wasser " + gameState.inventar.wasser;
+			this.setzlinge.Text = "Setzlinge " + gameState.inventar.setzlinge;
 			lastGameState = gameState;
 		}
 
@@ -69,6 +85,7 @@ namespace ForestSpirits.Frontend
 				Graphics graphics = this.CreateGraphics();
 				graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
 				board.draw(graphics);
+				resetButtons();
 			}
 			if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
 			{
@@ -76,6 +93,15 @@ namespace ForestSpirits.Frontend
 				Graphics graphics = this.CreateGraphics();
 				graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
 				board.draw(graphics);
+				resetButtons();
+			}
+			if (setzlingReady)
+			{
+				lLastClick.Text = Convert.ToString(e.Location);
+				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
+				game.setzlingPflanzen(new BusinessCoordinate(coordinate.x, coordinate.y));
+				resetButtons();
+                //WIP
 			}
 			else
 			{
@@ -83,10 +109,21 @@ namespace ForestSpirits.Frontend
 			}
 		}
 
+		// wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben
+		private void resetButtons()
+		{
+			this.setzlingReady = false;
+		}
+
 		private void start(object sender, EventArgs e)
 		{
 			board.draw(this.CreateGraphics());
 			game.start();
+		}
+
+		private void setzlinge_Click(object sender, EventArgs e)
+		{
+			setzlingReady = true;
 		}
 	}
 }
