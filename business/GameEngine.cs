@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,8 @@ namespace ForestSpirits.Business
 		private GameWindow frontend;
 		private GameState lastGameState = new GameState();
 		private Random random;
-		private int co2 = 5000;
+		private Co2Manager co2Manager = new Co2Manager();
+		//private int co2 = 5000;
 
 		public GameEngine(GameWindow frontend)
 		{
