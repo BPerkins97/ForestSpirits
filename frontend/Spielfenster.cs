@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using ForestSpirits.Business;
-using Frontend.business;
 using System.Threading;
 
 namespace ForestSpirits.Frontend
@@ -40,22 +39,22 @@ namespace ForestSpirits.Frontend
 			Graphics graphics = this.CreateGraphics();
 
 			if (gameState.sonneZumSammeln)
-            {
+			{
 				if (!lastGameState.sonneZumSammeln)
 				{
 					sonneLocation = new Point(MathUtils.random.Next(0, (int)board.getSize().Width - sonneWidth), MathUtils.random.Next(0, (int)board.getSize().Height - sonneWidth));
 				}
 				graphics.DrawImage(sonneImg, sonneLocation);
-            }
+			}
 
 			if (gameState.wasserZumSammeln)
-            {
+			{
 				if (!lastGameState.wasserZumSammeln)
 				{
 					wasserLocation = new Point(MathUtils.random.Next(0, (int)board.getSize().Width - sonneWidth), MathUtils.random.Next(0, (int)board.getSize().Height - sonneWidth));
 				}
 				graphics.DrawImage(wasserImg, wasserLocation);
-            }
+			}
 
 			this.sonne.Text = "Sonne " + gameState.inventar.sonne;
 			this.wasser.Text = "Wasser " + gameState.inventar.wasser;
@@ -72,7 +71,7 @@ namespace ForestSpirits.Frontend
 				board.draw(graphics);
 			}
 			if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
-            {
+			{
 				game.sammleWasser();
 				Graphics graphics = this.CreateGraphics();
 				graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
@@ -84,10 +83,10 @@ namespace ForestSpirits.Frontend
 			}
 		}
 
-        private void start(object sender, EventArgs e)
-        {
+		private void start(object sender, EventArgs e)
+		{
 			board.draw(this.CreateGraphics());
 			game.start();
 		}
-    }
+	}
 }
