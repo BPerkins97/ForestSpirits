@@ -47,7 +47,7 @@ namespace ForestSpirits.Business
 		{
 			GameState gameState = new GameState();
 			gameState.time = DateTime.Now.ToString();
-			gameState.co2 = this.co2;
+			gameState.co2 = this.co2Manager.Co2Level;
 			gameState.sonneZumSammeln = (lastGameState.sonneZumSammeln || random.NextDouble() < 0.1);
 			gameState.wasserZumSammeln = (lastGameState.wasserZumSammeln || random.NextDouble() < 0.1);
 			gameState.inventar = lastGameState.inventar;
