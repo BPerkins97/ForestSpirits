@@ -196,7 +196,11 @@ namespace ForestSpirits.Frontend
         private System.Windows.Forms.Button sonne;
         private System.Windows.Forms.Button wasser;
         private System.Windows.Forms.Button setzlinge;
-		private System.Windows.Forms.Label lLastClick;
+		private System.Windows.Forms.Label lLastClickPixelsText;
+		private System.Windows.Forms.Label lLastClickCoordinatesText;
+		private System.Windows.Forms.Label lLastClickPixelsWert;
+		private System.Windows.Forms.Label lLastClickCoordinatesWert;
+		private System.Windows.Forms.Label lDebugInfoText;
 	}
 }
 
