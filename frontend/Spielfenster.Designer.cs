@@ -179,6 +179,7 @@ namespace ForestSpirits.Frontend
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "Spielfenster";
 			this.Text = "Forest Spirits";
+			this.TopMost = true;
 			this.Shown += new System.EventHandler(this.start);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.onClick);
 			this.ResumeLayout(false);
