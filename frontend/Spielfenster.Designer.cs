@@ -1,4 +1,4 @@
-﻿
+
 namespace ForestSpirits.Frontend
 {
     partial class Spielfenster
@@ -36,7 +36,11 @@ namespace ForestSpirits.Frontend
 			this.sonne = new System.Windows.Forms.Button();
 			this.wasser = new System.Windows.Forms.Button();
 			this.setzlinge = new System.Windows.Forms.Button();
-			this.lLastClick = new System.Windows.Forms.Label();
+			this.lLastClickPixelsText = new System.Windows.Forms.Label();
+			this.lLastClickCoordinatesText = new System.Windows.Forms.Label();
+			this.lLastClickPixelsWert = new System.Windows.Forms.Label();
+			this.lLastClickCoordinatesWert = new System.Windows.Forms.Label();
+			this.lDebugInfoText = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// lSpielzeitText
@@ -109,14 +113,50 @@ namespace ForestSpirits.Frontend
 			this.setzlinge.UseVisualStyleBackColor = false;
 			this.setzlinge.Click += new System.EventHandler(this.setzlinge_Click);
 			// 
-			// lLastClick
+			// lLastClickPixelsText
 			// 
-			this.lLastClick.AutoSize = true;
-			this.lLastClick.Location = new System.Drawing.Point(574, 385);
-			this.lLastClick.Name = "lLastClick";
-			this.lLastClick.Size = new System.Drawing.Size(35, 13);
-			this.lLastClick.TabIndex = 7;
-			this.lLastClick.Text = "label1";
+			this.lLastClickPixelsText.AutoSize = true;
+			this.lLastClickPixelsText.Location = new System.Drawing.Point(536, 384);
+			this.lLastClickPixelsText.Name = "lLastClickPixelsText";
+			this.lLastClickPixelsText.Size = new System.Drawing.Size(29, 13);
+			this.lLastClickPixelsText.TabIndex = 7;
+			this.lLastClickPixelsText.Text = "Pixel";
+			// 
+			// lLastClickCoordinatesText
+			// 
+			this.lLastClickCoordinatesText.AutoSize = true;
+			this.lLastClickCoordinatesText.Location = new System.Drawing.Point(536, 416);
+			this.lLastClickCoordinatesText.Name = "lLastClickCoordinatesText";
+			this.lLastClickCoordinatesText.Size = new System.Drawing.Size(64, 13);
+			this.lLastClickCoordinatesText.TabIndex = 8;
+			this.lLastClickCoordinatesText.Text = "Koordinaten";
+			// 
+			// lLastClickPixelsWert
+			// 
+			this.lLastClickPixelsWert.AutoSize = true;
+			this.lLastClickPixelsWert.Location = new System.Drawing.Point(626, 384);
+			this.lLastClickPixelsWert.Name = "lLastClickPixelsWert";
+			this.lLastClickPixelsWert.Size = new System.Drawing.Size(35, 13);
+			this.lLastClickPixelsWert.TabIndex = 9;
+			this.lLastClickPixelsWert.Text = "label2";
+			// 
+			// lLastClickCoordinatesWert
+			// 
+			this.lLastClickCoordinatesWert.AutoSize = true;
+			this.lLastClickCoordinatesWert.Location = new System.Drawing.Point(628, 416);
+			this.lLastClickCoordinatesWert.Name = "lLastClickCoordinatesWert";
+			this.lLastClickCoordinatesWert.Size = new System.Drawing.Size(35, 13);
+			this.lLastClickCoordinatesWert.TabIndex = 10;
+			this.lLastClickCoordinatesWert.Text = "label3";
+			// 
+			// lDebugInfoText
+			// 
+			this.lDebugInfoText.AutoSize = true;
+			this.lDebugInfoText.Location = new System.Drawing.Point(536, 331);
+			this.lDebugInfoText.Name = "lDebugInfoText";
+			this.lDebugInfoText.Size = new System.Drawing.Size(42, 13);
+			this.lDebugInfoText.TabIndex = 11;
+			this.lDebugInfoText.Text = "Debug:";
 			// 
 			// Spielfenster
 			// 
@@ -124,7 +164,11 @@ namespace ForestSpirits.Frontend
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Silver;
 			this.ClientSize = new System.Drawing.Size(730, 473);
-			this.Controls.Add(this.lLastClick);
+			this.Controls.Add(this.lDebugInfoText);
+			this.Controls.Add(this.lLastClickCoordinatesWert);
+			this.Controls.Add(this.lLastClickPixelsWert);
+			this.Controls.Add(this.lLastClickCoordinatesText);
+			this.Controls.Add(this.lLastClickPixelsText);
 			this.Controls.Add(this.setzlinge);
 			this.Controls.Add(this.wasser);
 			this.Controls.Add(this.sonne);
