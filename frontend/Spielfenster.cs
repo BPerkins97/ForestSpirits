@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -41,6 +41,16 @@ namespace ForestSpirits.Frontend
 		{
 			this.lSpielzeitWert.Text = gameState.time;
 			this.lCo2LevelWert.Text = "" + gameState.co2;
+			// weil das mir auf die Eier gegangen ist nach einer Weile xD könnt es auch gerne
+			// sauberer umgestalten
+			try
+			{
+				this.CreateGraphics();
+			}
+			catch
+			{
+				Environment.Exit(0); // 0 = Sucess
+			}
 			Graphics graphics = this.CreateGraphics();
 
 			if (gameState.sonneZumSammeln)
@@ -101,7 +111,7 @@ namespace ForestSpirits.Frontend
 				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
 				game.setzlingPflanzen(new BusinessCoordinate(coordinate.x, coordinate.y));
 				resetButtons();
-                //WIP
+				//WIP
 			}
 			else
 			{

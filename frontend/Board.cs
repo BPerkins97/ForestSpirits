@@ -59,7 +59,7 @@ namespace ForestSpirits.Frontend
 		public Point getPoint(Coordinate coordinate)
 		{
 			//unfinished
-            int x = coordinate.x + 1;
+			int x = coordinate.x + 1;
 			int y = coordinate.y;
 
 			float heightDiff = (float)(mapper.fieldHeight * 0.75);
@@ -109,28 +109,6 @@ namespace ForestSpirits.Frontend
 				}
 			}
 			return result;
-		}
-
-		public Point coordinateToPoint(Coordinate coordinate)
-		{
-			//int x = coordinate.x;
-			//int y = coordinate.y;
-
-			//float heightDiff = (float)(this.fieldHeight * 0.75);
-			//float xPixel = x * this.fieldWidth;
-			//int width = xPixel + 111 > width ? xPixel + IMAGE_WIDTH : width;
-			//float yPixel = y * 2 * heightDiff;
-			//int height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
-			//graphics.DrawImage(feldImg, xPixel, yPixel);
-
-			//float xPixel = x * this.fieldWidth;
-			////width = xPixel + IMAGE_WIDTH > width ? xPixel + IMAGE_WIDTH : width;
-			//float heightDiff = (float)(this.fieldHeight * 0.75);
-			//float yPixel = y * 2 * heightDiff;
-			////height = yPixel + IMAGE_HEIGHT > height ? yPixel + IMAGE_HEIGHT : height;
-			////graphics.DrawImage(feldImg, xPixel, yPixel);
-			//return new Point((int)(xPixel), (int)(yPixel));
-			return new Point();
 		}
 
 		private bool isSelected(int x, int y, float actualX, float actualY)
