@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 
 // Only works for perfect hexagons
 namespace ForestSpirits.Frontend
@@ -103,7 +103,7 @@ namespace ForestSpirits.Frontend
 				{
 					if (!found && isSelected(j, i, x, y))
 					{
-						result = new Coordinate(i, j);
+						result = new Coordinate(j, i);
 						found = true;
 					}
 				}
