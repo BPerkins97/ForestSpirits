@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 
 // Only works for perfect hexagons
 namespace ForestSpirits.Frontend
@@ -58,18 +58,33 @@ namespace ForestSpirits.Frontend
 
 		public Point getPoint(Coordinate coordinate)
 		{
-			//unfinished
-			int x = coordinate.x + 1;
+			// Holt die Pixel Koordinaten von einer Kachel-Koordiante. Das umgekehrte von getCoordinate()
+			int x = coordinate.x;
 			int y = coordinate.y;
-
 			float heightDiff = (float)(mapper.fieldHeight * 0.75);
-			float xPixel = x * mapper.fieldWidth;
-			//int
-			float width = xPixel + 111 > this.width ? xPixel + IMAGE_WIDTH : this.width;
-			float yPixel = y * 2 * heightDiff;
-			//int
-			float height = yPixel + IMAGE_HEIGHT > this.height ? yPixel + IMAGE_HEIGHT : this.height;
-			return new Point((int)(xPixel), (int)(yPixel));
+
+			if (y % 2 == 0 || y == 0)
+			{
+				float xPixel = x * mapper.fieldWidth;
+				float yPixel = y * heightDiff;
+				return new Point((int)(xPixel), (int)(yPixel));
+			}
+			else // (y % 2 != 0)
+			{
+				float xPixel = x * mapper.fieldWidth + mapper.fieldWidth / 2;
+				float yPixel = y * heightDiff;
+				return new Point((int)(xPixel), (int)(yPixel));
+			}
+		}
+
+		public float getfieldWidth()
+		{
+			return this.mapper.fieldWidth;
+		}
+
+		public float getFieldHeight()
+		{
+			return this.mapper.fieldHeight;
 		}
 
 		public SizeF getSize()

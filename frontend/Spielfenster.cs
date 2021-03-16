@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -74,9 +74,12 @@ namespace ForestSpirits.Frontend
 			foreach (Setzling setzling in gameState.pflanzenRegister.setzlinge)
 			{
 				Point location = board.getPoint(new Coordinate(setzling.location.x, setzling.location.y));
-				//Point location = new Point(setzling.location.x, setzling.location.y);
+				float fieldWidth = board.getfieldWidth();
+				float fieldHeight = board.getFieldHeight();
+				location.X += ((int)(fieldWidth) / 2) - setzlingImg.Width / 2;
+				location.Y += ((int)(fieldHeight) / 2) - setzlingImg.Height / 2;
+
 				graphics.DrawImage(setzlingImg, location);
-				//graphics.DrawImage(setzlingImg, new Point(111 / 2, 111 / 2));
 				Console.WriteLine("test");
 			}
 
@@ -109,9 +112,9 @@ namespace ForestSpirits.Frontend
 			}
 			if (setzlingReady)
 			{
+				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
 				game.setzlingPflanzen(new BusinessCoordinate(coordinate.x, coordinate.y));
 				resetButtons();
-				//WIP
 			}
 			else
 			{
