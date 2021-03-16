@@ -89,10 +89,7 @@ namespace ForestSpirits.Frontend
 
 		private void onClick(object sender, MouseEventArgs e)
 		{
-			// last click debug
-			lLastClickPixelsWert.Text = Convert.ToString(e.Location);
-			Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-			lLastClickCoordinatesWert.Text = $"({coordinate.x}, {coordinate.y})";
+			debugLastClick(e);
 
 			if (e.X > sonneLocation.X && e.X < sonneLocation.X + sonneWidth && e.Y > sonneLocation.Y && e.Y < sonneLocation.Y + sonneWidth)
 			{
@@ -125,6 +122,14 @@ namespace ForestSpirits.Frontend
 		private void resetButtons()
 		{
 			this.setzlingReady = false;
+		}
+
+		private void debugLastClick(MouseEventArgs e)
+		{
+			// last click debug
+			lLastClickPixelsWert.Text = Convert.ToString(e.Location);
+			Coordinate coordinate = board.getCoordinates(e.X, e.Y);
+			lLastClickCoordinatesWert.Text = $"({coordinate.x}, {coordinate.y})";
 		}
 
 		private void start(object sender, EventArgs e)

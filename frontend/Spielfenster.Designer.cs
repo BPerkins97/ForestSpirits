@@ -1,4 +1,4 @@
-
+﻿
 namespace ForestSpirits.Frontend
 {
     partial class Spielfenster
