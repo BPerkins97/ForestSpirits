@@ -118,7 +118,6 @@ namespace ForestSpirits.Frontend
 			}
 			else
 			{
-				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
 			}
 		}
 
