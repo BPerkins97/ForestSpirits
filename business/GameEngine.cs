@@ -62,11 +62,20 @@ namespace ForestSpirits.Business
                 lastGameState.inventar.sonne--;
 				Feld newFeld = new Feld(location);
 				lastGameState.feldRegister.felder.Add(newFeld);
-				//	//fieldImg = "Zwieeck_medium.png";//change the picture
 			}
         }
 
-        private GameState update()
+		public void fueternMitWasser(BusinessCoordinate location)
+		{
+			if (lastGameState.inventar.wasser > 0)
+			{
+				lastGameState.inventar.wasser--;
+				Feld newFeld = new Feld(location);
+				lastGameState.feldRegister.felder.Add(newFeld);
+			}
+		}
+
+		private GameState update()
 		{
 			GameState gameState = new GameState();
 			gameState.time = DateTime.Now.ToString();

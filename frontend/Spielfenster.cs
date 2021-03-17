@@ -23,6 +23,7 @@ namespace ForestSpirits.Frontend
 		private Image setzlingImg;
 		private bool setzlingReady = false;
 		private bool sonneNehmen = false;
+		private bool wasserNehmen = false;
 		//private Image zweieckDefaultImg;
 		private Image zweieckMediumImg;
 		//private Image zweieckRipeImg;
@@ -145,13 +146,20 @@ namespace ForestSpirits.Frontend
 				game.fueternMitSonne(new BusinessCoordinate(coordinate.x, coordinate.y));
 				resetButtons();
             }
-        }
+			if (wasserNehmen)
+			{
+				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
+				game.fueternMitWasser(new BusinessCoordinate(coordinate.x, coordinate.y));
+				resetButtons();
+			}
+		}
 
         // wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben
         private void resetButtons()
 		{
 			this.setzlingReady = false;
 			this.sonneNehmen = false;
+			this.wasserNehmen = false;
 		}
 
 		private void debugLastClick(MouseEventArgs e)
@@ -176,6 +184,11 @@ namespace ForestSpirits.Frontend
 		 private void sonne_Click(object sender, EventArgs e)
         {
             sonneNehmen = true;
+        }
+
+        private void wasser_Click(object sender, EventArgs e)
+        {
+			wasserNehmen = true;
         }
     }
 }

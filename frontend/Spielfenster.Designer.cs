@@ -102,6 +102,7 @@ namespace ForestSpirits.Frontend
             this.wasser.TabIndex = 5;
             this.wasser.Text = "Wasser";
             this.wasser.UseVisualStyleBackColor = false;
+            this.wasser.Click += new System.EventHandler(this.wasser_Click);
             // 
             // setzlinge
             // 
