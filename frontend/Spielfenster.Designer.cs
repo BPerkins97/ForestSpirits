@@ -90,6 +90,7 @@ namespace ForestSpirits.Frontend
             this.sonne.TabIndex = 4;
             this.sonne.Text = "Sonne";
             this.sonne.UseVisualStyleBackColor = false;
+            this.sonne.Click += new System.EventHandler(this.sonne_Click);
             // 
             // wasser
             // 

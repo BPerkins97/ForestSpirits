@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -54,7 +55,18 @@ namespace ForestSpirits.Business
 			}
 		}
 
-		private GameState update()
+        public void fueternMitSonne(BusinessCoordinate location)
+        {
+            if (lastGameState.inventar.sonne > 0)
+            {
+                lastGameState.inventar.sonne--;
+				Feld newFeld = new Feld(location);
+				lastGameState.feldRegister.felder.Add(newFeld);
+				//	//fieldImg = "Zwieeck_medium.png";//change the picture
+			}
+        }
+
+        private GameState update()
 		{
 			GameState gameState = new GameState();
 			gameState.time = DateTime.Now.ToString();
@@ -63,8 +75,9 @@ namespace ForestSpirits.Business
 			gameState.wasserZumSammeln = (lastGameState.wasserZumSammeln || random.NextDouble() < 0.1);
 			gameState.inventar = lastGameState.inventar;
 			gameState.pflanzenRegister = lastGameState.pflanzenRegister;
-
+			gameState.feldRegister = lastGameState.feldRegister;
 			return gameState;
 		}
+
 	}
 }

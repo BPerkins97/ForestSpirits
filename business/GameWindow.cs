@@ -15,11 +15,13 @@ namespace ForestSpirits.Business
 		public bool wasserZumSammeln;
 		public Inventar inventar;
 		public PflanzenRegister pflanzenRegister;
+		public feldRegister feldRegister;
 
 		public GameState()
 		{
 			inventar = new Inventar();
 			pflanzenRegister = new PflanzenRegister();
+			feldRegister = new feldRegister();
 		}
 	}
 
@@ -33,10 +35,21 @@ namespace ForestSpirits.Business
 		}
 	}
 
-	public class Inventar
+    public class feldRegister
+    {
+        public List<Feld> felder;
+
+        public feldRegister()
+        {
+            this.felder = new List<Feld>();
+        }
+    }
+
+    public class Inventar
 	{
 		public int sonne;
 		public int wasser;
 		public int setzlinge = 99;
+		public int pilze;
 	}
 }

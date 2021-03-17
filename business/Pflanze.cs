@@ -38,4 +38,14 @@ namespace ForestSpirits.Business
 			this.y = y;
 		}
 	}
+
+	public class Feld
+    {
+		public BusinessCoordinate location;
+		public Feld(BusinessCoordinate location)
+		{
+			this.location = location;
+		}
+
+	}
 }

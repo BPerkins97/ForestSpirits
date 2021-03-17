@@ -16,11 +16,16 @@ namespace ForestSpirits.Frontend
 		private Point wasserLocation;
 		private int sonneWidth = 100;
 		private int pflanzeWidth = 40;
+		private int feldWidth = 100;
 		private GameState lastGameState;
 		private Image sonneImg;
 		private Image wasserImg;
 		private Image setzlingImg;
 		private bool setzlingReady = false;
+		private bool sonneNehmen = false;
+		//private Image zweieckDefaultImg;
+		private Image zweieckMediumImg;
+		//private Image zweieckRipeImg;
 
 		public Spielfenster()
 		{
@@ -35,6 +40,12 @@ namespace ForestSpirits.Frontend
 			wasserImg = FileUtils.resizeImage(wasserImg, sonneWidth, sonneWidth);
 			setzlingImg = FileUtils.loadImage("setzling.png");
 			setzlingImg = FileUtils.resizeImage(setzlingImg, pflanzeWidth, pflanzeWidth);
+			//zweieckDefaultImg = FileUtils.loadImage("Zweieck.png");
+			//zweieckDefaultImg = FileUtils.resizeImage(zweieckDefaultImg, IMAGE_WIDTH, IMAGE_HEIGHT);
+			zweieckMediumImg = FileUtils.loadImage("Zweieck_medium.png");
+			zweieckMediumImg = FileUtils.resizeImage(zweieckMediumImg, feldWidth, feldWidth);
+			//zweieckRipeImg = FileUtils.loadImage("Zweieck_ripe.png");
+			//zweieckRipeImg = FileUtils.resizeImage(zweieckRipeImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
 		public void showGameState(GameState gameState)
@@ -83,14 +94,26 @@ namespace ForestSpirits.Frontend
 				Console.WriteLine("test");
 			}
 
+			foreach (Feld feld in gameState.feldRegister.felder)
+			{
+				Point location = board.getPoint(new Coordinate(feld.location.x, feld.location.y));
+				float fieldWidth = board.getfieldWidth();
+				float fieldHeight = board.getFieldHeight();
+				location.X += ((int)(fieldWidth) / 2) - zweieckMediumImg.Width / 2;
+				location.Y += ((int)(fieldHeight) / 2) - zweieckMediumImg.Width / 2;
+
+				graphics.DrawImage(zweieckMediumImg, location);
+				Console.WriteLine("test");
+			}
 			// Inventar befüllen
 			this.sonne.Text = "Sonne " + gameState.inventar.sonne;
 			this.wasser.Text = "Wasser " + gameState.inventar.wasser;
 			this.setzlinge.Text = "Setzlinge " + gameState.inventar.setzlinge;
 			lastGameState = gameState;
-		}
 
-		private void onClick(object sender, MouseEventArgs e)
+        }
+
+        private void onClick(object sender, MouseEventArgs e)
 		{
 			debugLastClick(e);
 
@@ -116,15 +139,19 @@ namespace ForestSpirits.Frontend
 				game.setzlingPflanzen(new BusinessCoordinate(coordinate.x, coordinate.y));
 				resetButtons();
 			}
-			else
-			{
-			}
-		}
+            if (sonneNehmen)
+            {
+                Coordinate coordinate = board.getCoordinates(e.X, e.Y);
+				game.fueternMitSonne(new BusinessCoordinate(coordinate.x, coordinate.y));
+				resetButtons();
+            }
+        }
 
-		// wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben
-		private void resetButtons()
+        // wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben
+        private void resetButtons()
 		{
 			this.setzlingReady = false;
+			this.sonneNehmen = false;
 		}
 
 		private void debugLastClick(MouseEventArgs e)
@@ -145,5 +172,10 @@ namespace ForestSpirits.Frontend
 		{
 			setzlingReady = true;
 		}
-	}
+
+		 private void sonne_Click(object sender, EventArgs e)
+        {
+            sonneNehmen = true;
+        }
+    }
 }
