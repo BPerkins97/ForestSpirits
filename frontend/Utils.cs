@@ -15,7 +15,7 @@ namespace ForestSpirits.Frontend
 		public static Image loadImage(string imageName)
 		{
 			string path = RESOURCES_PATH + imageName;
-			return Image.FromFile(path);
+            return Image.FromFile(path);
 		}
 
 		public static Image resizeImage(Image imgToResize, int width, int height)

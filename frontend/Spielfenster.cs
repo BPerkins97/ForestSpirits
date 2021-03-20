@@ -14,9 +14,12 @@ namespace ForestSpirits.Frontend
 		private Board board;
 		private Point sonneLocation;
 		private Point wasserLocation;
+		private Point stadtLocation;
 		private int sonneWidth = 100;
 		private int pflanzeWidth = 40;
 		private int feldWidth = 100;
+		private int stadtWidth = 111;
+		private int stadtHeight = 127;
 		private GameState lastGameState;
 		private Image sonneImg;
 		private Image wasserImg;
@@ -26,6 +29,8 @@ namespace ForestSpirits.Frontend
 		private bool wasserNehmen = false;
 		//private Image zweieckDefaultImg;
 		private Image zweieckMediumImg;
+		private Image zweieckStadtImg;
+		private bool gamestart = true;
 		//private Image zweieckRipeImg;
 
 		public Spielfenster()
@@ -45,6 +50,8 @@ namespace ForestSpirits.Frontend
 			//zweieckDefaultImg = FileUtils.resizeImage(zweieckDefaultImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 			zweieckMediumImg = FileUtils.loadImage("Zweieck_medium.png");
 			zweieckMediumImg = FileUtils.resizeImage(zweieckMediumImg, feldWidth, feldWidth);
+			zweieckStadtImg = FileUtils.loadImage("Zweieck_stadt.png");
+			zweieckStadtImg = FileUtils.resizeImage(zweieckStadtImg, stadtWidth, stadtHeight);
 			//zweieckRipeImg = FileUtils.loadImage("Zweieck_ripe.png");
 			//zweieckRipeImg = FileUtils.resizeImage(zweieckRipeImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
@@ -64,6 +71,12 @@ namespace ForestSpirits.Frontend
 				Environment.Exit(0); // 0 = Sucess
 			}
 			Graphics graphics = this.CreateGraphics();
+
+			if (gamestart == true)
+			{
+				stadtLocation = board.getPoint(new Coordinate(3,2));
+				graphics.DrawImage(zweieckStadtImg, stadtLocation);
+			}
 
 			if (gameState.sonneZumSammeln)
 			{

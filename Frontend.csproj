@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="business\StadtManager.cs" />
     <Compile Include="business\Pflanze.cs" />
     <Compile Include="business\GameWindow.cs" />
     <Compile Include="business\GameEngine.cs" />

@@ -16,6 +16,7 @@ namespace ForestSpirits.Business
 		public Inventar inventar;
 		public PflanzenRegister pflanzenRegister;
 		public feldRegister feldRegister;
+		public int tiles;
 
 		public GameState()
 		{
