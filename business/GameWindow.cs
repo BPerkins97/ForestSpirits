@@ -1,56 +1,98 @@
-﻿using System.Collections.Generic;
+﻿
+using ForestSpirits.business;
+using Frontend.business;
+using System;
 
 namespace ForestSpirits.Business
 {
-	internal interface GameWindow
+	public interface GameWindow
 	{
 		void showGameState(GameState gameState);
 	}
 
 	public class GameState
 	{
-		public string time;
-		public int co2;
-		public bool sonneZumSammeln;
-		public bool wasserZumSammeln;
-		public Inventar inventar;
-		public PflanzenRegister pflanzenRegister;
-		public feldRegister feldRegister;
-		public int tiles;
+		public readonly string time = "00:00:00";
+		public readonly int co2 = 5000;
+		public readonly bool isSunCollectable = false;
+		public readonly bool isWaterCollectable = false;
+		public readonly Inventar inventar = new Inventar();
+		public readonly Field[,] fields = new Field[5,5];
+		public readonly int tiles = 0;
 
 		public GameState()
-		{
-			inventar = new Inventar();
-			pflanzenRegister = new PflanzenRegister();
-			feldRegister = new feldRegister();
-		}
-	}
-
-	public class PflanzenRegister
-	{
-		public List<Setzling> setzlinge;
-
-		public PflanzenRegister()
-		{
-			this.setzlinge = new List<Setzling>();
-		}
-	}
-
-    public class feldRegister
-    {
-        public List<Feld> felder;
-
-        public feldRegister()
         {
-            this.felder = new List<Feld>();
+			time = "";
+			co2 = 0;
+			isSunCollectable = false;
+			isWaterCollectable = false;
+			inventar = new Inventar();
+			fields = new Field[100, 100];
+			tiles = 0;
         }
-    }
 
-    public class Inventar
-	{
-		public int sonne;
-		public int wasser;
-		public int setzlinge = 99;
-		public int pilze;
+		public GameState(string time, int co2, bool isSunCollectable, bool isWaterCollectable, Inventar inventar, Field[,] fields, int tiles)
+        {
+			this.time = time;
+			this.co2 = co2;
+			this.isSunCollectable = isSunCollectable;
+			this.isWaterCollectable = isWaterCollectable;
+			this.inventar = inventar;
+			this.fields = fields;
+			//Array.Copy(fields, this.fields, fields.GetLength(0) * fields.GetLength(1));
+			this.tiles = tiles;
+        }
+
+        internal GameState withWater(bool isWaterCollectable)
+        {
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, fields, tiles);
+		}
+
+        public static GameState createGameStateFromConfig(GameConfiguration config)
+        {
+			Field[,] fields = new Field[config.fieldRows, config.fieldColumns];
+			for (int i=0;i<config.fieldRows;i++)
+            {
+				for (int j=0;j<config.fieldColumns;j++)
+                {
+					fields[i, j] = new Field();
+					Console.WriteLine(i + "," + j);
+					if (i == config.cityStart.row && j == config.cityStart.column)
+                    {
+						Console.WriteLine("city");
+						fields[i, j] = fields[i, j].withType(FieldType.CITY);
+                    }
+                }
+            }
+
+			return new GameState("00:00:00", config.co2StartValue, false, false, new Inventar(), fields, 0);
+        }
+
+		public GameState withSun(bool isSunCollectable)
+        {
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, fields, tiles);
+        }
+
+        internal GameState withCo2(int co2)
+        {
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, fields, tiles);
+		}
+
+        internal GameState withInventar(Inventar inventar)
+        {
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, fields, tiles);
+		}
+
+        internal GameState withFields(Field[,] fields)
+        {
+			Field[,] temp = new Field[fields.GetLength(0), fields.GetLength(1)];
+			Array.Copy(fields, temp, fields.GetLength(0) * fields.GetLength(1));
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, temp, tiles);
+		}
+
+        internal GameState withTime(string time)
+        {
+			return new GameState(time, co2, isSunCollectable, isWaterCollectable, inventar, fields, tiles);
+		}
 	}
 }

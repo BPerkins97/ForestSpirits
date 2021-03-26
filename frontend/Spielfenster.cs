@@ -14,12 +14,8 @@ namespace ForestSpirits.Frontend
 		private Board board;
 		private Point sonneLocation;
 		private Point wasserLocation;
-		private Point stadtLocation;
 		private int sonneWidth = 100;
 		private int pflanzeWidth = 40;
-		private int feldWidth = 100;
-		private int stadtWidth = 111;
-		private int stadtHeight = 127;
 		private GameState lastGameState;
 		private Image sonneImg;
 		private Image wasserImg;
@@ -27,13 +23,7 @@ namespace ForestSpirits.Frontend
 		private bool setzlingReady = false;
 		private bool sonneNehmen = false;
 		private bool wasserNehmen = false;
-
-		//private Image zweieckDefaultImg;
-		private Image zweieckMediumImg;
-
-		private Image zweieckStadtImg;
-		private bool gamestart = true;
-		//private Image zweieckRipeImg;
+		private bool gameStart = true;
 
 		public Spielfenster()
 		{
@@ -41,21 +31,13 @@ namespace ForestSpirits.Frontend
 			game = new GameEngine(this);
 
 			this.board = new Board(3, 4);
-			lastGameState = new GameState();
+			lastGameState = GameState.createGameStateFromConfig(new GameConfiguration());
 			sonneImg = FileUtils.loadImage("sonne.png");
 			sonneImg = FileUtils.resizeImage(sonneImg, sonneWidth, sonneWidth);
 			wasserImg = FileUtils.loadImage("wasser.png");
 			wasserImg = FileUtils.resizeImage(wasserImg, sonneWidth, sonneWidth);
 			setzlingImg = FileUtils.loadImage("setzling.png");
 			setzlingImg = FileUtils.resizeImage(setzlingImg, pflanzeWidth, pflanzeWidth);
-			//zweieckDefaultImg = FileUtils.loadImage("Zweieck.png");
-			//zweieckDefaultImg = FileUtils.resizeImage(zweieckDefaultImg, IMAGE_WIDTH, IMAGE_HEIGHT);
-			zweieckMediumImg = FileUtils.loadImage("Zweieck_medium.png");
-			zweieckMediumImg = FileUtils.resizeImage(zweieckMediumImg, feldWidth, feldWidth);
-			zweieckStadtImg = FileUtils.loadImage("Zweieck_stadt.png");
-			zweieckStadtImg = FileUtils.resizeImage(zweieckStadtImg, stadtWidth, stadtHeight);
-			//zweieckRipeImg = FileUtils.loadImage("Zweieck_ripe.png");
-			//zweieckRipeImg = FileUtils.resizeImage(zweieckRipeImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
 		public void showGameState(GameState gameState)
@@ -73,57 +55,56 @@ namespace ForestSpirits.Frontend
 				Environment.Exit(0); // 0 = Sucess
 			}
 			Graphics graphics = this.CreateGraphics();
+			graphics.Clear(Color.Gray);
 
-			if (gamestart == true)
-			{
-				stadtLocation = board.getPoint(new Coordinate(3, 2));
-				graphics.DrawImage(zweieckStadtImg, stadtLocation);
-			}
 
-			if (gameState.sonneZumSammeln)
+			for (int row=0;row<gameState.fields.GetLength(0);row++)
+            {
+				for (int column=0;column<gameState.fields.GetLength(1);column++)
+                {
+					if (row == 0 && column == 0)
+                    {
+						Console.WriteLine(gameState.fields[row, column].type);
+                    }
+					FieldType level = gameState.fields[row, column].type;
+					board.drawField(new Coordinate(row, column), level, graphics);
+					
+				
+					PointF fieldLocation = board.getPoint(new Coordinate(row, column));
+					if (gameState.fields[row,column].type == FieldType.SEEDLING)
+                    {
+						PointF seedlingLoc = new PointF();
+						seedlingLoc.X = fieldLocation.X + board.getfieldWidth() / 2 - setzlingImg.Width / 2;
+						seedlingLoc.Y = fieldLocation.Y + board.getFieldHeight() / 2 - setzlingImg.Height / 2;
+						graphics.DrawImage(setzlingImg, seedlingLoc);
+					}
+
+				}
+            }
+
+			if (gameState.isSunCollectable)
 			{
-				if (!lastGameState.sonneZumSammeln)
+				if (!lastGameState.isSunCollectable)
 				{
 					sonneLocation = new Point(MathUtils.random.Next(0, (int)board.getSize().Width - sonneWidth), MathUtils.random.Next(0, (int)board.getSize().Height - sonneWidth));
 				}
 				graphics.DrawImage(sonneImg, sonneLocation);
 			}
 
-			if (gameState.wasserZumSammeln)
+			if (gameState.isWaterCollectable)
 			{
-				if (!lastGameState.wasserZumSammeln)
+				if (!lastGameState.isWaterCollectable)
 				{
 					wasserLocation = new Point(MathUtils.random.Next(0, (int)board.getSize().Width - sonneWidth), MathUtils.random.Next(0, (int)board.getSize().Height - sonneWidth));
 				}
 				graphics.DrawImage(wasserImg, wasserLocation);
 			}
-
-			foreach (Setzling setzling in gameState.pflanzenRegister.setzlinge)
-			{
-				Point location = board.getPoint(new Coordinate(setzling.location.x, setzling.location.y));
-				float fieldWidth = board.getfieldWidth();
-				float fieldHeight = board.getFieldHeight();
-				location.X += ((int)(fieldWidth) / 2) - setzlingImg.Width / 2;
-				location.Y += ((int)(fieldHeight) / 2) - setzlingImg.Height / 2;
-
-				graphics.DrawImage(setzlingImg, location);
-			}
-
-			foreach (Feld feld in gameState.feldRegister.felder)
-			{
-				Point location = board.getPoint(new Coordinate(feld.location.x, feld.location.y));
-				float fieldWidth = board.getfieldWidth();
-				float fieldHeight = board.getFieldHeight();
-				location.X += ((int)(fieldWidth) / 2) - zweieckMediumImg.Width / 2;
-				location.Y += ((int)(fieldHeight) / 2) - zweieckMediumImg.Width / 2;
-
-				graphics.DrawImage(zweieckMediumImg, location);
-			}
 			// Inventar befüllen
-			this.sonne.Text = "Sonne " + gameState.inventar.sonne;
-			this.wasser.Text = "Wasser " + gameState.inventar.wasser;
-			this.setzlinge.Text = "Setzlinge " + gameState.inventar.setzlinge;
+			this.sonne.Text = "Sonne " + gameState.inventar.sun;
+			this.wasser.Text = "Wasser " + gameState.inventar.water;
+			this.setzlinge.Text = "Setzlinge " + gameState.inventar.seedlings;
 			lastGameState = gameState;
+			gameStart = false;
 		}
 
 		private void onClick(object sender, MouseEventArgs e)
@@ -133,35 +114,26 @@ namespace ForestSpirits.Frontend
 			if (e.X > sonneLocation.X && e.X < sonneLocation.X + sonneWidth && e.Y > sonneLocation.Y && e.Y < sonneLocation.Y + sonneWidth)
 			{
 				game.sammleSonne();
-				Graphics graphics = this.CreateGraphics();
-				graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
-				board.draw(graphics);
 				resetButtons();
 			}
 			if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
 			{
 				game.sammleWasser();
-				Graphics graphics = this.CreateGraphics();
-				graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
-				board.draw(graphics);
 				resetButtons();
 			}
 			if (setzlingReady)
 			{
-				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-				game.setzlingPflanzen(new BusinessCoordinate(coordinate.x, coordinate.y));
+				game.setzlingPflanzen(board.getCoordinates(e.X, e.Y));
 				resetButtons();
 			}
 			if (sonneNehmen)
 			{
-				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-				game.fueternMitSonne(new BusinessCoordinate(coordinate.x, coordinate.y));
+				game.feedSun(board.getCoordinates(e.X, e.Y));
 				resetButtons();
 			}
 			if (wasserNehmen)
 			{
-				Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-				game.fueternMitWasser(new BusinessCoordinate(coordinate.x, coordinate.y));
+				game.feedWater(board.getCoordinates(e.X, e.Y));
 				resetButtons();
 			}
 		}
@@ -179,12 +151,11 @@ namespace ForestSpirits.Frontend
 			// last click debug
 			lLastClickPixelsWert.Text = Convert.ToString(e.Location);
 			Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-			lLastClickCoordinatesWert.Text = $"({coordinate.x}, {coordinate.y})";
+			lLastClickCoordinatesWert.Text = $"({coordinate.row}, {coordinate.column})";
 		}
 
 		private void start(object sender, EventArgs e)
 		{
-			board.draw(this.CreateGraphics());
 			game.start();
 		}
 

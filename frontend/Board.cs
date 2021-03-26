@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using ForestSpirits.Business;
+using System;
+using System.Drawing;
 
 // Only works for perfect hexagons
 namespace ForestSpirits.Frontend
@@ -14,13 +16,22 @@ namespace ForestSpirits.Frontend
 		private float height;
 		private FieldMapper mapper;
 		private Image feldImg;
+		private Image ripeFieldImg;
+		private Image halfRipeFieldImg;
+		private Image cityImg;
 
 		public Board(int rows, int columns)
 		{
 			this.rows = rows;
 			this.columns = columns;
-			feldImg = FileUtils.loadImage("Zweieck.png");
+			feldImg = FileUtils.loadImage("field_default.png");
 			feldImg = FileUtils.resizeImage(feldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
+			ripeFieldImg = FileUtils.loadImage("field_ripe.png");
+			ripeFieldImg = FileUtils.resizeImage(ripeFieldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
+			halfRipeFieldImg = FileUtils.loadImage("field_half_ripe.png");
+			halfRipeFieldImg = FileUtils.resizeImage(halfRipeFieldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
+			cityImg = FileUtils.loadImage("field_city.png");
+			cityImg = FileUtils.resizeImage(cityImg, IMAGE_WIDTH, IMAGE_HEIGHT);
 			mapper = new FieldMapper(rows, columns, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
@@ -51,6 +62,30 @@ namespace ForestSpirits.Frontend
 			}
 		}
 
+		public void drawField(Coordinate coord, FieldType level, Graphics graphics)
+        {
+			Image img = null;
+			switch (level)
+            {
+				case FieldType.NORMAL:
+					img = feldImg;
+					break;
+				case FieldType.MEDIUM:
+					img = halfRipeFieldImg;
+					break;
+				case FieldType.HIGH:
+					img = ripeFieldImg;
+					break;
+				case FieldType.CITY:
+					img = cityImg;
+					break;
+            }
+			Point point = getPoint(coord);
+			graphics.DrawImage(img, point);
+			width = Math.Max(width, point.X + IMAGE_WIDTH);
+			height = Math.Max(height, point.Y + IMAGE_HEIGHT);
+		}
+
 		public Coordinate getCoordinates(float x, float y)
 		{
 			return mapper.pointToCoordinate(x, y);
@@ -59,8 +94,8 @@ namespace ForestSpirits.Frontend
 		public Point getPoint(Coordinate coordinate)
 		{
 			// Holt die Pixel Koordinaten von einer Kachel-Koordiante. Das umgekehrte von getCoordinate()
-			int x = coordinate.x;
-			int y = coordinate.y;
+			int x = coordinate.row;
+			int y = coordinate.column;
 			float heightDiff = (float)(mapper.fieldHeight * 0.75);
 
 			if (y % 2 == 0 || y == 0)
@@ -77,7 +112,12 @@ namespace ForestSpirits.Frontend
 			}
 		}
 
-		public float getfieldWidth()
+        internal void drawCity(Coordinate coordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float getfieldWidth()
 		{
 			return this.mapper.fieldWidth;
 		}
@@ -91,7 +131,12 @@ namespace ForestSpirits.Frontend
 		{
 			return new SizeF(width, height);
 		}
-	}
+
+        internal void drawField(Coordinate coordinate, Business.FieldType level)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 	internal class FieldMapper
 	{
@@ -157,18 +202,6 @@ namespace ForestSpirits.Frontend
 			}
 
 			return true;
-		}
-	}
-
-	internal class Coordinate
-	{
-		public readonly int x;
-		public readonly int y;
-
-		public Coordinate(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
 		}
 	}
 }

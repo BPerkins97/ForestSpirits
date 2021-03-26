@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using ForestSpirits.business;
+using Frontend.business;
+using System;
 using System.Threading.Tasks;
 
 namespace ForestSpirits.Business
@@ -11,81 +8,102 @@ namespace ForestSpirits.Business
 	internal class GameEngine
 	{
 		private GameWindow frontend;
-		private GameState lastGameState = new GameState();
+		private GameState gameState;
+		private Inventar inventar;
+		private Field[,] fields;
 		private Random random;
-		private Co2Manager co2Manager = new Co2Manager();
-		//private int co2 = 5000;
+		private Co2Manager co2Manager;
+		private GameConfiguration config;
 
 		public GameEngine(GameWindow frontend)
 		{
+			config = new GameConfiguration();
+			inventar = new Inventar();
 			this.frontend = frontend;
+			gameState = GameState.createGameStateFromConfig(config);
+			co2Manager = new Co2Manager(config.co2StartValue);
 			random = new Random();
+			fields = gameState.fields;
 		}
 
 		public async void start()
 		{
 			while (true)
 			{
-				lastGameState = update();
-				frontend.showGameState(lastGameState);
-				await Task.Delay(1000 / 30);
+				update();
+				frontend.showGameState(gameState);
+				await Task.Delay(1000 / 2);
 			}
 		}
 
 		public void sammleSonne()
 		{
-			lastGameState.sonneZumSammeln = false;
-			lastGameState.inventar.sonne++;
+			gameState = gameState.withSun(false);
+			inventar = inventar.withSun(inventar.sun + 1);
 		}
 
 		public void sammleWasser()
 		{
-			lastGameState.wasserZumSammeln = false;
-			lastGameState.inventar.wasser++;
+			gameState = gameState.withWater(false);
+			inventar = inventar.withWater(inventar.water + 1);
 		}
 
-		public void setzlingPflanzen(BusinessCoordinate location)
+		public void setzlingPflanzen(Coordinate location)
 		{
-			//unfinished
-            if (lastGameState.inventar.setzlinge > 0)
+            if (inventar.seedlings > 0 && gameState.fields[location.row, location.column].plant != null)
 			{
-				lastGameState.inventar.setzlinge--;
-				Setzling newSetzling = new Setzling(location);
-				lastGameState.pflanzenRegister.setzlinge.Add(newSetzling);
+				inventar = inventar.withSeedlings(inventar.seedlings - 1);
+				fields[location.row, location.column] = fields[location.row, location.column]
+					.withPlant(new Seedling())
+					.withType(FieldType.SEEDLING);
+
 			}
 		}
 
-        public void fueternMitSonne(BusinessCoordinate location)
+        public void feedSun(Coordinate location)
         {
-            if (lastGameState.inventar.sonne > 0)
+            if (inventar.sun > 0)
             {
-                lastGameState.inventar.sonne--;
-				Feld newFeld = new Feld(location);
-				lastGameState.feldRegister.felder.Add(newFeld);
+				fields[location.row, location.column] = fields[location.row, location.column]
+					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
+				inventar = inventar.withSun(inventar.sun - 1);
+				updateFieldType(location);
 			}
         }
 
-		public void fueternMitWasser(BusinessCoordinate location)
+		public void feedWater(Coordinate location)
 		{
-			if (lastGameState.inventar.wasser > 0)
+			if (inventar.water > 0)
 			{
-				lastGameState.inventar.wasser--;
-				Feld newFeld = new Feld(location);
-				lastGameState.feldRegister.felder.Add(newFeld);
+				fields[location.row, location.column] = fields[location.row, location.column]
+					.withWaterStorage(fields[location.row, location.column].waterStorage + 1);
+				inventar = inventar.withWater(inventar.water - 1);
+				updateFieldType(location);
 			}
 		}
 
-		private GameState update()
+        private void updateFieldType(Coordinate coord)
+        {
+			int sun = fields[coord.row, coord.column].sunStorage;
+			int water = fields[coord.row, coord.column].waterStorage;
+			if (sun > 0 && water > 0)
+            {
+				fields[coord.row, coord.column] = fields[coord.row, coord.column]
+					.withSunStorage(sun - 1)
+					.withWaterStorage(water - 1)
+					.withType(FieldLevelFactory.nextLevel(fields[coord.row, coord.column].type));
+            }
+        }
+
+        private void update()
 		{
-			GameState gameState = new GameState();
-			gameState.time = DateTime.Now.ToString();
-			gameState.co2 = this.co2Manager.Co2Level;
-			gameState.sonneZumSammeln = (lastGameState.sonneZumSammeln || random.NextDouble() < 0.1);
-			gameState.wasserZumSammeln = (lastGameState.wasserZumSammeln || random.NextDouble() < 0.1);
-			gameState.inventar = lastGameState.inventar;
-			gameState.pflanzenRegister = lastGameState.pflanzenRegister;
-			gameState.feldRegister = lastGameState.feldRegister;
-			return gameState;
+			gameState = gameState
+				.withTime(DateTime.Now.ToString())
+				.withCo2(co2Manager.co2)
+				.withSun(gameState.isSunCollectable || random.NextDouble() < 0.3)
+				.withWater(gameState.isWaterCollectable || random.NextDouble() < 0.3)
+				.withFields(fields)
+				.withInventar(inventar);
 		}
 
 	}

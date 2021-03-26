@@ -8,17 +8,16 @@ namespace ForestSpirits.Business
 {
 	public class Co2Manager
 	{
-		private static int START_CO2 = 2999;
-		public int Co2Level { get; set; }
+		public readonly int co2;
 
-		public Co2Manager(int startCo2 = 0)
+		public Co2Manager(int co2)
 		{
-			this.Co2Level = START_CO2;
+			this.co2 = co2;
 		}
 
-		public string hello()
-		{
-			return "hellO";
-		}
+		public Co2Manager withCo2(int co2)
+        {
+			return new Co2Manager(co2);
+        }
 	}
 }
