@@ -97,6 +97,22 @@ namespace ForestSpirits.Business
 
         private void update()
 		{
+			for (int i=0;i<fields.GetLength(0);i++)
+            {
+				for (int j=0;j<fields.GetLength(1);j++)
+                {
+					if (fields[i, j].type == FieldType.SEEDLING)
+					{
+						Seedling seedling = (Seedling)fields[i, j].plant;
+						Plant plant = seedling
+							.withSun(seedling.sunStorage + config.resourceAdmissionRate)
+							.withWater(seedling.waterStorage + config.resourceAdmissionRate);
+						fields[i, j] = fields[i, j]
+							.withPlant(plant);
+					}
+				}
+            }
+			
 			gameState = gameState
 				.withTime(DateTime.Now.ToString())
 				.withCo2(co2Manager.co2)

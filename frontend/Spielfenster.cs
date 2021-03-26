@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using ForestSpirits.Business;
-using System.Threading;
+using ForestSpirits.business;
 
 namespace ForestSpirits.Frontend
 {
@@ -23,15 +21,16 @@ namespace ForestSpirits.Frontend
 		private bool setzlingReady = false;
 		private bool sonneNehmen = false;
 		private bool wasserNehmen = false;
-		private bool gameStart = true;
+		private Panel contextMenu;
 
 		public Spielfenster()
 		{
 			InitializeComponent();
 			game = new GameEngine(this);
 
-			this.board = new Board(3, 4);
-			lastGameState = GameState.createGameStateFromConfig(new GameConfiguration());
+			GameConfiguration config = new GameConfiguration();
+			this.board = new Board(config.fieldRows, config.fieldColumns);
+			lastGameState = GameState.createGameStateFromConfig(config);
 			sonneImg = FileUtils.loadImage("sonne.png");
 			sonneImg = FileUtils.resizeImage(sonneImg, sonneWidth, sonneWidth);
 			wasserImg = FileUtils.loadImage("wasser.png");
@@ -102,38 +101,71 @@ namespace ForestSpirits.Frontend
 			this.wasser.Text = "Wasser " + gameState.inventar.water;
 			this.setzlinge.Text = "Setzlinge " + gameState.inventar.seedlings;
 			lastGameState = gameState;
-			gameStart = false;
 		}
 
 		private void onClick(object sender, MouseEventArgs e)
 		{
 			debugLastClick(e);
+			if (contextMenu != null)
+			{
+				this.Controls.Remove(contextMenu);
+			}
 
 			if (e.X > sonneLocation.X && e.X < sonneLocation.X + sonneWidth && e.Y > sonneLocation.Y && e.Y < sonneLocation.Y + sonneWidth)
 			{
 				game.sammleSonne();
 				resetButtons();
-			}
-			if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
+			} else if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
 			{
 				game.sammleWasser();
 				resetButtons();
-			}
-			if (setzlingReady)
+			} else if (setzlingReady)
 			{
 				game.setzlingPflanzen(board.getCoordinates(e.X, e.Y));
 				resetButtons();
-			}
-			if (sonneNehmen)
+			} else if (sonneNehmen)
 			{
 				game.feedSun(board.getCoordinates(e.X, e.Y));
 				resetButtons();
-			}
-			if (wasserNehmen)
+			} else if (wasserNehmen)
 			{
 				game.feedWater(board.getCoordinates(e.X, e.Y));
 				resetButtons();
+			} else
+            {
+				Coordinate coord = board.getCoordinates(e.X, e.Y);
+				if (coord.row == -1)
+                {
+					return;
+                }
+				Field field = lastGameState.fields[coord.row, coord.column];
+				if (field.type == FieldType.SEEDLING)
+				{
+					ProgressBar water = new ProgressBar();
+					water.Location = new Point(20, 100);
+					water.Size = new Size(200, 20);
+					water.ForeColor = Color.Aqua;
+					water.Maximum = 100;
+					water.Minimum = 0;
+					water.Value = ((Seedling)field.plant).waterStorage;
+					ProgressBar sun = new ProgressBar();
+					sun.Location = new Point(20, 50);
+					sun.Size = new Size(200, 20);
+					sun.ForeColor = Color.Yellow;
+					sun.Maximum = 100;
+					sun.Minimum = 0;
+					sun.Value = ((Seedling)field.plant).sunStorage;
+
+
+					contextMenu = new Panel();
+					contextMenu.Controls.Add(water);
+					contextMenu.Controls.Add(sun);
+					contextMenu.Location = new Point(e.X, e.Y);
+					contextMenu.Size = new Size(240, 140);
+					this.Controls.Add(contextMenu);
+				}
 			}
+		
 		}
 
 		// wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben

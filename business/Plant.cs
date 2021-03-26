@@ -1,24 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace ForestSpirits.Business
 {
-    public class Plant
+    public interface Plant
     {
-        internal bool isSeedling()
-        {
-            return false;
-        }
+        Plant withSun(int sun);
+        Plant withWater(int water);
+
     }
 
     public class Seedling : Plant
 	{
-        new internal bool isSeedling()
+        public readonly int waterStorage;
+        public readonly int sunStorage;
+
+        public Seedling()
         {
-            return true;
+            waterStorage = 0;
+            sunStorage = 0;
         }
-	}
+
+        public Seedling(int sunStorage, int waterStorage)
+        {
+            this.sunStorage = sunStorage;
+            this.waterStorage = waterStorage;
+        }
+
+        public Plant withSun(int sunStorage)
+        {
+            return new Seedling(sunStorage, waterStorage);
+        }
+
+        public Plant withWater(int waterStorage)
+        {
+            return new Seedling(sunStorage, waterStorage);
+        }
+    }
 }

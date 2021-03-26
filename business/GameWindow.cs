@@ -39,7 +39,6 @@ namespace ForestSpirits.Business
 			this.isWaterCollectable = isWaterCollectable;
 			this.inventar = inventar;
 			this.fields = fields;
-			//Array.Copy(fields, this.fields, fields.GetLength(0) * fields.GetLength(1));
 			this.tiles = tiles;
         }
 

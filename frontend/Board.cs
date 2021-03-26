@@ -88,7 +88,12 @@ namespace ForestSpirits.Frontend
 
 		public Coordinate getCoordinates(float x, float y)
 		{
-			return mapper.pointToCoordinate(x, y);
+			Coordinate coord = mapper.pointToCoordinate(x, y);
+			if (coord.row >= rows || coord.column >= columns)
+			{
+				return new Coordinate(-1, -1);
+			}
+			return coord;
 		}
 
 		public Point getPoint(Coordinate coordinate)
