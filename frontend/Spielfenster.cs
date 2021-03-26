@@ -62,23 +62,21 @@ namespace ForestSpirits.Frontend
             {
 				for (int column=0;column<gameState.fields.GetLength(1);column++)
                 {
-					if (row == 0 && column == 0)
-                    {
-						Console.WriteLine(gameState.fields[row, column].type);
-                    }
 					FieldType level = gameState.fields[row, column].type;
-					board.drawField(new Coordinate(row, column), level, graphics);
-					
-				
 					PointF fieldLocation = board.getPoint(new Coordinate(row, column));
-					if (gameState.fields[row,column].type == FieldType.SEEDLING)
-                    {
+
+					if (gameState.fields[row, column].type == FieldType.SEEDLING)
+					{
+						board.drawField(new Coordinate(row, column), FieldType.HIGH, graphics);
 						PointF seedlingLoc = new PointF();
 						seedlingLoc.X = fieldLocation.X + board.getfieldWidth() / 2 - setzlingImg.Width / 2;
 						seedlingLoc.Y = fieldLocation.Y + board.getFieldHeight() / 2 - setzlingImg.Height / 2;
 						graphics.DrawImage(setzlingImg, seedlingLoc);
 					}
-
+					else
+					{
+						board.drawField(new Coordinate(row, column), level, graphics);
+					}
 				}
             }
 

@@ -17,7 +17,7 @@ namespace Frontend.business
 		{
 			sun = 0;
 			water = 0;
-			seedlings = 0;
+			seedlings = 3;
 			mushrooms = 0;
 		}
 

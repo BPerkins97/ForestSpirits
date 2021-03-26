@@ -50,7 +50,7 @@ namespace ForestSpirits.Business
 
 		public void setzlingPflanzen(Coordinate location)
 		{
-            if (inventar.seedlings > 0 && gameState.fields[location.row, location.column].plant != null)
+            if (inventar.seedlings > 0 && fields[location.row, location.column].plant == null)
 			{
 				inventar = inventar.withSeedlings(inventar.seedlings - 1);
 				fields[location.row, location.column] = fields[location.row, location.column]
