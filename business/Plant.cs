@@ -2,38 +2,39 @@
 
 namespace ForestSpirits.Business
 {
-    public interface Plant
-    {
-        Plant withSun(int sun);
-        Plant withWater(int water);
-
-    }
-
-    public class Seedling : Plant
+    public class Plant
 	{
         public readonly int waterStorage;
         public readonly int sunStorage;
+        public readonly int progress;
 
-        public Seedling()
+        public Plant()
         {
             waterStorage = 0;
             sunStorage = 0;
+            progress = 0;
         }
 
-        public Seedling(int sunStorage, int waterStorage)
+        public Plant(int sunStorage, int waterStorage, int progress)
         {
             this.sunStorage = sunStorage;
             this.waterStorage = waterStorage;
+            this.progress = progress;
         }
 
         public Plant withSun(int sunStorage)
         {
-            return new Seedling(sunStorage, waterStorage);
+            return new Plant(sunStorage, waterStorage, progress);
         }
 
         public Plant withWater(int waterStorage)
         {
-            return new Seedling(sunStorage, waterStorage);
+            return new Plant(sunStorage, waterStorage, progress);
+        }
+
+        public Plant withProgress(int progress)
+        {
+            return new Plant(sunStorage, waterStorage, progress);
         }
     }
 }

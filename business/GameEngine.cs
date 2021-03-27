@@ -50,11 +50,11 @@ namespace ForestSpirits.Business
 
 		public void setzlingPflanzen(Coordinate location)
 		{
-            if (inventar.seedlings > 0 && fields[location.row, location.column].plant == null)
+            if (inventar.seedlings > 0 && fields[location.row, location.column].type == FieldType.HIGH)
 			{
 				inventar = inventar.withSeedlings(inventar.seedlings - 1);
 				fields[location.row, location.column] = fields[location.row, location.column]
-					.withPlant(new Seedling())
+					.withPlant(new Plant())
 					.withType(FieldType.SEEDLING);
 
 			}
@@ -101,14 +101,39 @@ namespace ForestSpirits.Business
             {
 				for (int j=0;j<fields.GetLength(1);j++)
                 {
-					if (fields[i, j].type == FieldType.SEEDLING)
+					FieldType type = fields[i, j].type;
+					if (type == FieldType.SEEDLING || type == FieldType.TREE)
 					{
-						Seedling seedling = (Seedling)fields[i, j].plant;
-						Plant plant = seedling
-							.withSun(seedling.sunStorage + config.resourceAdmissionRate)
-							.withWater(seedling.waterStorage + config.resourceAdmissionRate);
+						Plant plant = fields[i, j].plant;
+						if (plant.sunStorage < config.resourceMax)
+                        {
+							int amount = plant.sunStorage + config.resourceAdmissionRate;
+							amount = Math.Min(config.resourceMax, amount);
+							plant = plant
+								.withSun(amount);
+                        }
+						if (plant.waterStorage < config.resourceMax)
+                        {
+							int amount = plant.waterStorage + config.resourceAdmissionRate;
+							amount = Math.Min(config.resourceMax, amount);
+							plant = plant
+								.withWater(amount);
+                        }
+						if (plant.waterStorage == config.resourceMax && plant.sunStorage == config.resourceMax && plant.progress < config.resourceMax)
+                        {
+							int amount = plant.progress + config.resourceAdmissionRate;
+							amount = Math.Min(config.resourceMax, amount);
+							plant = plant.withProgress(amount);
+                        }
+						if (type == FieldType.SEEDLING && plant.progress == config.resourceMax)
+                        {
+							plant = new Plant();
+							type = FieldType.TREE;
+                        }
+
 						fields[i, j] = fields[i, j]
-							.withPlant(plant);
+							.withPlant(plant)
+							.withType(type);
 					}
 				}
             }

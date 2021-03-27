@@ -19,23 +19,31 @@ namespace ForestSpirits.Frontend
 		private Image ripeFieldImg;
 		private Image halfRipeFieldImg;
 		private Image cityImg;
+		private Image treeImg;
+		private Image seedlingImg;
 
 		public Board(int rows, int columns)
 		{
 			this.rows = rows;
 			this.columns = columns;
-			feldImg = FileUtils.loadImage("field_default.png");
-			feldImg = FileUtils.resizeImage(feldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
-			ripeFieldImg = FileUtils.loadImage("field_ripe.png");
-			ripeFieldImg = FileUtils.resizeImage(ripeFieldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
-			halfRipeFieldImg = FileUtils.loadImage("field_half_ripe.png");
-			halfRipeFieldImg = FileUtils.resizeImage(halfRipeFieldImg, IMAGE_WIDTH, IMAGE_HEIGHT);
-			cityImg = FileUtils.loadImage("field_city.png");
-			cityImg = FileUtils.resizeImage(cityImg, IMAGE_WIDTH, IMAGE_HEIGHT);
+
+			feldImg = loadImg("field_default.png");
+			ripeFieldImg = loadImg("field_ripe.png");
+			halfRipeFieldImg = loadImg("field_half_ripe.png");
+			cityImg = loadImg("field_city.png");
+			treeImg = loadImg("field_tree.png");
+			seedlingImg = loadImg("field_seedling.png");
 			mapper = new FieldMapper(rows, columns, IMAGE_WIDTH, IMAGE_HEIGHT);
 		}
 
-		public void draw(Graphics graphics)
+        private Image loadImg(string fileName)
+        {
+			Image img = FileUtils.loadImage(fileName);
+			img = FileUtils.resizeImage(img, IMAGE_WIDTH, IMAGE_HEIGHT);
+			return img;
+        }
+
+        public void draw(Graphics graphics)
 		{
 			float heightDiff = (float)(mapper.fieldHeight * 0.75);
 			for (float y = 0; y < rows / 2.0; y++) // This float: rows / 2.0 is on purpose!
@@ -62,38 +70,40 @@ namespace ForestSpirits.Frontend
 			}
 		}
 
-		public void drawField(Coordinate coord, FieldType level, Graphics graphics)
+		public void drawField(Coordinate coord, FieldType type, Graphics graphics)
         {
-			Image img = null;
-			switch (level)
-            {
-				case FieldType.NORMAL:
-					img = feldImg;
-					break;
-				case FieldType.MEDIUM:
-					img = halfRipeFieldImg;
-					break;
-				case FieldType.HIGH:
-					img = ripeFieldImg;
-					break;
-				case FieldType.CITY:
-					img = cityImg;
-					break;
-            }
+			Image img = getFieldImage(type);
+			
 			Point point = getPoint(coord);
 			graphics.DrawImage(img, point);
 			width = Math.Max(width, point.X + IMAGE_WIDTH);
 			height = Math.Max(height, point.Y + IMAGE_HEIGHT);
 		}
 
+		private Image getFieldImage(FieldType type)
+        {
+			switch (type)
+			{
+				case FieldType.NORMAL:
+					return feldImg;
+				case FieldType.MEDIUM:
+					return halfRipeFieldImg;
+				case FieldType.HIGH:
+					return ripeFieldImg;
+				case FieldType.CITY:
+					return cityImg;
+				case FieldType.SEEDLING:
+					return seedlingImg;
+				case FieldType.TREE:
+					return treeImg;
+				default:
+					throw new Exception();
+			}
+		}
+
 		public Coordinate getCoordinates(float x, float y)
 		{
-			Coordinate coord = mapper.pointToCoordinate(x, y);
-			if (coord.row >= rows || coord.column >= columns)
-			{
-				return new Coordinate(-1, -1);
-			}
-			return coord;
+			return mapper.pointToCoordinate(x, y);
 		}
 
 		public Point getPoint(Coordinate coordinate)

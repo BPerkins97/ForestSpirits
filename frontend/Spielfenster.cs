@@ -13,11 +13,9 @@ namespace ForestSpirits.Frontend
 		private Point sonneLocation;
 		private Point wasserLocation;
 		private int sonneWidth = 100;
-		private int pflanzeWidth = 40;
 		private GameState lastGameState;
 		private Image sonneImg;
 		private Image wasserImg;
-		private Image setzlingImg;
 		private bool setzlingReady = false;
 		private bool sonneNehmen = false;
 		private bool wasserNehmen = false;
@@ -35,8 +33,6 @@ namespace ForestSpirits.Frontend
 			sonneImg = FileUtils.resizeImage(sonneImg, sonneWidth, sonneWidth);
 			wasserImg = FileUtils.loadImage("wasser.png");
 			wasserImg = FileUtils.resizeImage(wasserImg, sonneWidth, sonneWidth);
-			setzlingImg = FileUtils.loadImage("setzling.png");
-			setzlingImg = FileUtils.resizeImage(setzlingImg, pflanzeWidth, pflanzeWidth);
 		}
 
 		public void showGameState(GameState gameState)
@@ -62,20 +58,7 @@ namespace ForestSpirits.Frontend
 				for (int column=0;column<gameState.fields.GetLength(1);column++)
                 {
 					FieldType level = gameState.fields[row, column].type;
-					PointF fieldLocation = board.getPoint(new Coordinate(row, column));
-
-					if (gameState.fields[row, column].type == FieldType.SEEDLING)
-					{
-						board.drawField(new Coordinate(row, column), FieldType.HIGH, graphics);
-						PointF seedlingLoc = new PointF();
-						seedlingLoc.X = fieldLocation.X + board.getfieldWidth() / 2 - setzlingImg.Width / 2;
-						seedlingLoc.Y = fieldLocation.Y + board.getFieldHeight() / 2 - setzlingImg.Height / 2;
-						graphics.DrawImage(setzlingImg, seedlingLoc);
-					}
-					else
-					{
-						board.drawField(new Coordinate(row, column), level, graphics);
-					}
+					board.drawField(new Coordinate(row, column), level, graphics);
 				}
             }
 
@@ -139,7 +122,7 @@ namespace ForestSpirits.Frontend
 					return;
                 }
 				Field field = lastGameState.fields[coord.row, coord.column];
-				if (field.type == FieldType.SEEDLING)
+				if (field.type == FieldType.SEEDLING || field.type == FieldType.TREE)
 				{
 					ProgressBar water = new ProgressBar();
 					water.Location = new Point(20, 100);
@@ -147,19 +130,26 @@ namespace ForestSpirits.Frontend
 					water.ForeColor = Color.Aqua;
 					water.Maximum = 100;
 					water.Minimum = 0;
-					water.Value = ((Seedling)field.plant).waterStorage;
+					water.Value = Math.Min(100, field.plant.waterStorage);
 					ProgressBar sun = new ProgressBar();
 					sun.Location = new Point(20, 50);
 					sun.Size = new Size(200, 20);
 					sun.ForeColor = Color.Yellow;
 					sun.Maximum = 100;
 					sun.Minimum = 0;
-					sun.Value = ((Seedling)field.plant).sunStorage;
-
+					sun.Value = Math.Min(100, field.plant.sunStorage);
+					Label sunL = new Label();
+					sunL.Text = "Sonne";
+					sunL.Location = new Point(20, 20);
+					Label waterL = new Label();
+					waterL.Text = "Wasser";
+					waterL.Location = new Point(20, 80);
 
 					contextMenu = new Panel();
 					contextMenu.Controls.Add(water);
 					contextMenu.Controls.Add(sun);
+					contextMenu.Controls.Add(sunL);
+					contextMenu.Controls.Add(waterL);
 					contextMenu.Location = new Point(e.X, e.Y);
 					contextMenu.Size = new Size(240, 140);
 					this.Controls.Add(contextMenu);
