@@ -138,20 +138,32 @@ namespace ForestSpirits.Frontend
 					sun.Maximum = 100;
 					sun.Minimum = 0;
 					sun.Value = Math.Min(100, field.plant.sunStorage);
+					ProgressBar progress = new ProgressBar();
+					progress.Location = new Point(20, 150);
+					progress.Size = new Size(200, 20);
+					progress.ForeColor = Color.Yellow;
+					progress.Maximum = 100;
+					progress.Minimum = 0;
+					progress.Value = Math.Min(100, field.plant.progress);
 					Label sunL = new Label();
 					sunL.Text = "Sonne";
 					sunL.Location = new Point(20, 20);
 					Label waterL = new Label();
 					waterL.Text = "Wasser";
 					waterL.Location = new Point(20, 80);
+					Label progressL = new Label();
+					progressL.Text = "Fortschritt";
+					progressL.Location = new Point(20, 130);
 
 					contextMenu = new Panel();
 					contextMenu.Controls.Add(water);
 					contextMenu.Controls.Add(sun);
 					contextMenu.Controls.Add(sunL);
 					contextMenu.Controls.Add(waterL);
+					contextMenu.Controls.Add(progress);
+					contextMenu.Controls.Add(progressL);
 					contextMenu.Location = new Point(e.X, e.Y);
-					contextMenu.Size = new Size(240, 140);
+					contextMenu.Size = new Size(240, 190);
 					this.Controls.Add(contextMenu);
 				}
 			}

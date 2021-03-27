@@ -86,12 +86,26 @@ namespace ForestSpirits.Business
         {
 			int sun = fields[coord.row, coord.column].sunStorage;
 			int water = fields[coord.row, coord.column].waterStorage;
-			if (sun > 0 && water > 0)
+			FieldType type = fields[coord.row, coord.column].type;
+			if (sun > 0 && water > 0 && (type == FieldType.NORMAL || type == FieldType.MEDIUM))
             {
 				fields[coord.row, coord.column] = fields[coord.row, coord.column]
 					.withSunStorage(sun - 1)
 					.withWaterStorage(water - 1)
-					.withType(FieldLevelFactory.nextLevel(fields[coord.row, coord.column].type));
+					.withType(nextLevel(type));
+            }
+        }
+
+        private FieldType nextLevel(FieldType type)
+        {
+            switch (type)
+            {
+				case FieldType.NORMAL:
+					return FieldType.MEDIUM;
+				case FieldType.MEDIUM:
+					return FieldType.HIGH;
+				default:
+					return FieldType.NORMAL;
             }
         }
 

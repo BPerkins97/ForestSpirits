@@ -55,10 +55,8 @@ namespace ForestSpirits.Business
 				for (int j=0;j<config.fieldColumns;j++)
                 {
 					fields[i, j] = new Field();
-					Console.WriteLine(i + "," + j);
 					if (i == config.cityStart.row && j == config.cityStart.column)
                     {
-						Console.WriteLine("city");
 						fields[i, j] = fields[i, j].withType(FieldType.CITY);
                     }
                 }

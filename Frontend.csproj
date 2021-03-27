@@ -47,13 +47,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="business\BusinessCoordinate.cs" />
-    <Compile Include="business\Inventar.cs" />
-    <Compile Include="business\Field.cs" />
-    <Compile Include="business\FieldType.cs" />
+    <Compile Include="business\entities\Coordinate.cs" />
+    <Compile Include="business\entities\Inventar.cs" />
+    <Compile Include="business\entities\Field.cs" />
+    <Compile Include="business\entities\FieldType.cs" />
     <Compile Include="business\GameConfiguration.cs" />
     <Compile Include="business\StadtManager.cs" />
-    <Compile Include="business\Plant.cs" />
+    <Compile Include="business\entities\Plant.cs" />
     <Compile Include="business\GameWindow.cs" />
     <Compile Include="business\GameEngine.cs" />
     <Compile Include="business\Co2Manager.cs" />
@@ -92,8 +92,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="business\entities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
