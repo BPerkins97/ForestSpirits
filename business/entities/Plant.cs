@@ -6,7 +6,7 @@ namespace ForestSpirits.Business
 	{
         public readonly int waterStorage;
         public readonly int sunStorage;
-        public readonly int progress;
+        public int progress;
 
         public Plant()
         {

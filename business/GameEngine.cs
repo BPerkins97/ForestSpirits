@@ -145,6 +145,12 @@ namespace ForestSpirits.Business
 							type = FieldType.TREE;
                         }
 
+						if (plant.progress == config.resourceMax)
+						{
+							inventar = inventar.withSeedlings(inventar.seedlings + 1);
+							plant.progress = 0;
+						}
+
 						fields[i, j] = fields[i, j]
 							.withPlant(plant)
 							.withType(type);
