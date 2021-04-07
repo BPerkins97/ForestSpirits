@@ -1,4 +1,4 @@
-﻿using ForestSpirits.business;
+﻿using ForestSpirits.Business;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +15,8 @@ namespace ForestSpirits.Business
 		private int prevTreeCount;
 		private int updateTreeCount;
 		private int co2Reduction = 100;
+		private readonly int co2High;
+		private readonly int co2Low;
 
 		public GameEngine(GameWindow frontend)
 		{
@@ -24,6 +26,8 @@ namespace ForestSpirits.Business
 			gameState = GameState.createGameStateFromConfig(config);
 			random = new Random();
 			fields = gameState.fields;
+			co2High = config.co2High;
+			co2Low = config.co2Low;
 		}
 
 		public async void start()
@@ -112,12 +116,26 @@ namespace ForestSpirits.Business
 
 		private void update()
 		{
+			// For local use
+			Disaster disaster = gameState.currentDisaster;
+			if (DateTime.Now >= disaster.triggerTime && gameState.isDisasterComing)
+			{
+				disaster.wasTriggered = true;
+				gameState.isDisasterComing = false;
+			}
+
+			// Felder durchgehen
 			for (int i = 0; i < fields.GetLength(0); i++)
 			{
 				for (int j = 0; j < fields.GetLength(1); j++)
 				{
-					FieldType type = fields[i, j].type;
-					if (type == FieldType.SEEDLING || type == FieldType.TREE)
+					Field field = fields[i, j];
+					FieldType type = field.type;
+					bool hasPlant = type == FieldType.SEEDLING || type == FieldType.TREE;
+					bool isNature = type != FieldType.CITY;
+
+					// Bepflanzte Felder
+					if (hasPlant)
 					{
 						Plant plant = fields[i, j].plant;
 						if (plant.sunStorage < config.resourceMax)
@@ -159,11 +177,45 @@ namespace ForestSpirits.Business
 							gameState.co2 -= co2Reduction;
 						}
 
-						fields[i, j] = fields[i, j]
+						if (disaster.wasTriggered)
+						{
+							field = field.withPlant(disaster.damagePlant(field.plant));
+						}
+
+						fields[i, j] = field
 							.withPlant(plant)
 							.withType(type);
 					}
+
+					// Unbepflanzte Felder
+					if (!hasPlant && isNature)
+					{
+						if (disaster.wasTriggered)
+						{
+							field = disaster.damageField(field);
+						}
+
+						fields[i, j] = field;
+					}
 				}
+			}
+
+			if (gameState.co2 >= co2High && !gameState.isDisasterComing)
+			{
+				disaster = new Disaster(DisasterType.HEATWAVE, DisasterIntensity.HIGH);
+				gameState.isDisasterComing = true;
+			}
+
+			if (gameState.co2 >= co2Low && !gameState.isDisasterComing)
+			{
+				disaster = new Disaster(DisasterType.HEATWAVE, DisasterIntensity.LOW);
+				gameState.isDisasterComing = true;
+			}
+
+			if (gameState.isDisasterComing && disaster.wasTriggered)
+			{
+				gameState.isDisasterComing = false;
+				disaster = new Disaster();
 			}
 
 			gameState = gameState
@@ -172,7 +224,9 @@ namespace ForestSpirits.Business
 				.withSun(gameState.isSunCollectable || random.NextDouble() < 0.3)
 				.withWater(gameState.isWaterCollectable || random.NextDouble() < 0.3)
 				.withFields(fields)
-				.withInventar(inventar);
+				.withInventar(inventar)
+				.withDisaster(disaster, gameState.isDisasterComing);
+			Console.WriteLine("debug");
 		}
 	}
 }

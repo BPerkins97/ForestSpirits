@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ForestSpirits.business
+namespace ForestSpirits.Business
 {
 	internal class StadtManager
 	{
