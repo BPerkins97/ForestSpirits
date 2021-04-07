@@ -8,6 +8,6 @@
         public int fieldRows = 2;
         public int fieldColumns = 2;
         public Coordinate cityStart = new Coordinate(1,1);
-        public int resourceAdmissionRate = 10;
+        public int resourceAdmissionRate = 5;
     }
 }

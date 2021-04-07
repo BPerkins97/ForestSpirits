@@ -3,3 +3,5 @@ Release/
 Debug/
 bin/
 obj/
+/packages/Control.Draggable.1.0.5049.269
+/packages.config

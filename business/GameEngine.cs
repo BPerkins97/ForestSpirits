@@ -62,27 +62,64 @@ namespace ForestSpirits.Business
 
         public void feedSun(Coordinate location)
         {
-            if (inventar.sun > 0)
+            if (inventar.sun > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
             {
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
 				inventar = inventar.withSun(inventar.sun - 1);
 				updateFieldType(location);
 			}
-        }
+			else if (fields[location.row, location.column].type == FieldType.SEEDLING || fields[location.row, location.column].type == FieldType.TREE)
+            {
+				fields[location.row, location.column] = fields[location.row, location.column]
+					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
+				inventar = inventar.withSun(inventar.sun - 1);
+
+				FieldType type = fields[location.row, location.column].type;
+				Plant plant = fields[location.row, location.column].plant;
+				if (plant.sunStorage < config.resourceMax)
+				{
+					int amount = plant.sunStorage + 10;
+					plant = plant
+						.withSun(amount);
+				}
+				fields[location.row, location.column] = fields[location.row, location.column]
+							.withPlant(plant)
+							.withType(type);
+			}
+
+		}
 
 		public void feedWater(Coordinate location)
 		{
-			if (inventar.water > 0)
+			if (inventar.water > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
 			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withWaterStorage(fields[location.row, location.column].waterStorage + 1);
 				inventar = inventar.withWater(inventar.water - 1);
 				updateFieldType(location);
 			}
+			else if (fields[location.row, location.column].type == FieldType.SEEDLING || fields[location.row, location.column].type == FieldType.TREE)
+			{
+				fields[location.row, location.column] = fields[location.row, location.column]
+					.withWaterStorage(fields[location.row, location.column].waterStorage + 1);
+				inventar = inventar.withWater(inventar.water - 1);
+
+				FieldType type = fields[location.row, location.column].type;
+				Plant plant = fields[location.row, location.column].plant;
+				if (plant.waterStorage < config.resourceMax)
+				{
+					int amount = plant.waterStorage + 10;
+					plant = plant
+						.withWater(amount);
+				}
+				fields[location.row, location.column] = fields[location.row, location.column]
+							.withPlant(plant)
+							.withType(type);
+			}
 		}
 
-        private void updateFieldType(Coordinate coord)
+		private void updateFieldType(Coordinate coord)
         {
 			int sun = fields[coord.row, coord.column].sunStorage;
 			int water = fields[coord.row, coord.column].waterStorage;
