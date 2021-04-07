@@ -11,7 +11,6 @@ namespace ForestSpirits.Business
 		private Inventar inventar;
 		private Field[,] fields;
 		private Random random;
-		private Co2Manager co2Manager;
 		private GameConfiguration config;
 		private int prevTreeCount;
 		private int updateTreeCount;
@@ -23,7 +22,6 @@ namespace ForestSpirits.Business
 			inventar = new Inventar();
 			this.frontend = frontend;
 			gameState = GameState.createGameStateFromConfig(config);
-			co2Manager = new Co2Manager(config.co2StartValue);
 			random = new Random();
 			fields = gameState.fields;
 		}
@@ -158,7 +156,7 @@ namespace ForestSpirits.Business
 						if (prevTreeCount != updateTreeCount)
 						{
 							prevTreeCount = updateTreeCount;
-							co2Manager.co2 -= co2Reduction;
+							gameState.co2 -= co2Reduction;
 						}
 
 						fields[i, j] = fields[i, j]
@@ -170,7 +168,7 @@ namespace ForestSpirits.Business
 
 			gameState = gameState
 				.withTime(DateTime.Now.ToString())
-				.withCo2(co2Manager.co2)
+				.withCo2(gameState.co2)
 				.withSun(gameState.isSunCollectable || random.NextDouble() < 0.3)
 				.withWater(gameState.isWaterCollectable || random.NextDouble() < 0.3)
 				.withFields(fields)
