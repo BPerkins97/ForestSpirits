@@ -1,5 +1,5 @@
 ﻿using ForestSpirits.Business;
-using Frontend.business;
+using ForestSpirits.business;
 using System;
 
 namespace ForestSpirits.business

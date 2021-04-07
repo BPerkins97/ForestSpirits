@@ -1,5 +1,4 @@
 ﻿using ForestSpirits.business;
-using Frontend.business;
 using System;
 using System.Threading.Tasks;
 
@@ -53,26 +52,25 @@ namespace ForestSpirits.Business
 
 		public void setzlingPflanzen(Coordinate location)
 		{
-            if (inventar.seedlings > 0 && fields[location.row, location.column].type == FieldType.HIGH)
+			if (inventar.seedlings > 0 && fields[location.row, location.column].type == FieldType.HIGH)
 			{
 				inventar = inventar.withSeedlings(inventar.seedlings - 1);
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withPlant(new Plant())
 					.withType(FieldType.SEEDLING);
-
 			}
 		}
 
-        public void feedSun(Coordinate location)
-        {
-            if (inventar.sun > 0)
-            {
+		public void feedSun(Coordinate location)
+		{
+			if (inventar.sun > 0)
+			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
 				inventar = inventar.withSun(inventar.sun - 1);
 				updateFieldType(location);
 			}
-        }
+		}
 
 		public void feedWater(Coordinate location)
 		{
@@ -85,69 +83,71 @@ namespace ForestSpirits.Business
 			}
 		}
 
-        private void updateFieldType(Coordinate coord)
-        {
+		private void updateFieldType(Coordinate coord)
+		{
 			int sun = fields[coord.row, coord.column].sunStorage;
 			int water = fields[coord.row, coord.column].waterStorage;
 			FieldType type = fields[coord.row, coord.column].type;
 			if (sun > 0 && water > 0 && (type == FieldType.NORMAL || type == FieldType.MEDIUM))
-            {
+			{
 				fields[coord.row, coord.column] = fields[coord.row, coord.column]
 					.withSunStorage(sun - 1)
 					.withWaterStorage(water - 1)
 					.withType(nextLevel(type));
-            }
-        }
+			}
+		}
 
-        private FieldType nextLevel(FieldType type)
-        {
-            switch (type)
-            {
+		private FieldType nextLevel(FieldType type)
+		{
+			switch (type)
+			{
 				case FieldType.NORMAL:
 					return FieldType.MEDIUM;
+
 				case FieldType.MEDIUM:
 					return FieldType.HIGH;
+
 				default:
 					return FieldType.NORMAL;
-            }
-        }
+			}
+		}
 
-        private void update()
+		private void update()
 		{
-			for (int i=0;i<fields.GetLength(0);i++)
-            {
-				for (int j=0;j<fields.GetLength(1);j++)
-                {
+			for (int i = 0; i < fields.GetLength(0); i++)
+			{
+				for (int j = 0; j < fields.GetLength(1); j++)
+				{
 					FieldType type = fields[i, j].type;
 					if (type == FieldType.SEEDLING || type == FieldType.TREE)
 					{
 						Plant plant = fields[i, j].plant;
 						if (plant.sunStorage < config.resourceMax)
-                        {
+						{
 							int amount = plant.sunStorage + config.resourceAdmissionRate;
 							amount = Math.Min(config.resourceMax, amount);
 							plant = plant
 								.withSun(amount);
-                        }
+						}
 						if (plant.waterStorage < config.resourceMax)
-                        {
+						{
 							int amount = plant.waterStorage + config.resourceAdmissionRate;
 							amount = Math.Min(config.resourceMax, amount);
 							plant = plant
 								.withWater(amount);
-                        }
+						}
 						if (plant.waterStorage == config.resourceMax && plant.sunStorage == config.resourceMax && plant.progress < config.resourceMax)
-                        {
+						{
 							int amount = plant.progress + config.resourceAdmissionRate;
 							amount = Math.Min(config.resourceMax, amount);
 							plant = plant.withProgress(amount);
-                        }
+						}
 						if (type == FieldType.SEEDLING && plant.progress == config.resourceMax)
-                        {
+						{
 							plant = new Plant();
 							type = FieldType.TREE;
 							updateTreeCount += 1;
-                        }
+						}
 
 						if (plant.progress == config.resourceMax)
 						{
@@ -156,18 +156,18 @@ namespace ForestSpirits.Business
 						}
 
 						if (prevTreeCount != updateTreeCount)
-                        {
+						{
 							prevTreeCount = updateTreeCount;
-                            co2Manager.co2 -= co2Reduction;
-                        }
+							co2Manager.co2 -= co2Reduction;
+						}
 
 						fields[i, j] = fields[i, j]
 							.withPlant(plant)
 							.withType(type);
 					}
 				}
-            }
-			
+			}
+
 			gameState = gameState
 				.withTime(DateTime.Now.ToString())
 				.withCo2(co2Manager.co2)
@@ -176,6 +176,5 @@ namespace ForestSpirits.Business
 				.withFields(fields)
 				.withInventar(inventar);
 		}
-
 	}
 }
