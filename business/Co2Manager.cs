@@ -8,7 +8,7 @@ namespace ForestSpirits.Business
 {
 	public class Co2Manager
 	{
-		public readonly int co2;
+		public int co2;
 
 		public Co2Manager(int co2)
 		{

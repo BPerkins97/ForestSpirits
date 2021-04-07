@@ -14,6 +14,9 @@ namespace ForestSpirits.Business
 		private Random random;
 		private Co2Manager co2Manager;
 		private GameConfiguration config;
+		private int prevTreeCount;
+		private int updateTreeCount;
+		private int co2Reduction = 100;
 
 		public GameEngine(GameWindow frontend)
 		{
@@ -143,6 +146,7 @@ namespace ForestSpirits.Business
                         {
 							plant = new Plant();
 							type = FieldType.TREE;
+							updateTreeCount += 1;
                         }
 
 						if (plant.progress == config.resourceMax)
@@ -150,6 +154,12 @@ namespace ForestSpirits.Business
 							inventar = inventar.withSeedlings(inventar.seedlings + 1);
 							plant.progress = 0;
 						}
+
+						if (prevTreeCount != updateTreeCount)
+                        {
+							prevTreeCount = updateTreeCount;
+                            co2Manager.co2 -= co2Reduction;
+                        }
 
 						fields[i, j] = fields[i, j]
 							.withPlant(plant)
