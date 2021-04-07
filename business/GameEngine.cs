@@ -1,5 +1,6 @@
 ﻿using ForestSpirits.Business;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ForestSpirits.Business
@@ -12,9 +13,9 @@ namespace ForestSpirits.Business
 		private Field[,] fields;
 		private Random random;
 		private GameConfiguration config;
+		private StadtManager Stadt;
 		private int prevTreeCount;
 		private int updateTreeCount;
-		private int co2Reduction = 100;
 		private readonly int co2High;
 		private readonly int co2Low;
 
@@ -25,6 +26,7 @@ namespace ForestSpirits.Business
 			this.frontend = frontend;
 			gameState = GameState.createGameStateFromConfig(config);
 			random = new Random();
+			Stadt = new StadtManager();
 			fields = gameState.fields;
 			co2High = config.co2High;
 			co2Low = config.co2Low;
@@ -174,7 +176,7 @@ namespace ForestSpirits.Business
 						if (prevTreeCount != updateTreeCount)
 						{
 							prevTreeCount = updateTreeCount;
-							gameState.co2 -= co2Reduction;
+							gameState = gameState.withCo2(gameState.co2 - config.co2Reduction);
 						}
 
 						if (disaster.wasTriggered)
@@ -218,6 +220,53 @@ namespace ForestSpirits.Business
 				disaster = new Disaster();
 			}
 
+			if (Stadt.blub())
+            {
+				List<Coordinate> auswahl = new List<Coordinate>();
+				for (int row = 0; row < gameState.fields.GetLength(0); row++)
+				{
+					for (int column = 0; column < gameState.fields.GetLength(1); column++)
+					{
+						FieldType level = gameState.fields[row, column].type;
+						if (level == FieldType.CITY)
+                        {
+							if(checkField(row - 1, column) && gameState.fields[row - 1, column].type == FieldType.NORMAL)
+                            {
+								auswahl.Add(new Coordinate(row - 1, column));
+							}
+							if (checkField(row - 1, column + 1) && gameState.fields[row - 1, column + 1].type == FieldType.NORMAL)
+							{
+								auswahl.Add(new Coordinate(row - 1, column + 1));
+							}
+							if (checkField(row, column + 1) && gameState.fields[row, column + 1].type == FieldType.NORMAL)
+							{
+								auswahl.Add(new Coordinate(row, column + 1));
+							}
+							if (checkField(row + 1, column + 1) && gameState.fields[row + 1, column + 1].type == FieldType.NORMAL)
+							{
+								auswahl.Add(new Coordinate(row + 1, column + 1));
+							}
+							if (checkField(row + 1, column) && gameState.fields[row + 1, column].type == FieldType.NORMAL)
+							{
+								auswahl.Add(new Coordinate(row + 1, column));
+							}
+							if (checkField(row, column - 1) && gameState.fields[row, column - 1].type == FieldType.NORMAL)
+							{
+								auswahl.Add(new Coordinate(row, column - 1));
+							}
+						}
+					}
+				}
+				if (auswahl.Count > 0)
+				{
+					int index = random.Next(auswahl.Count);
+					Coordinate newCityCoordinate = auswahl[index];
+					fields[newCityCoordinate.row, newCityCoordinate.column] = fields[newCityCoordinate.row, newCityCoordinate.column].withType(FieldType.CITY);
+					gameState = gameState.withCo2(gameState.co2 + config.co2Increase);
+				}
+			}
+			
+
 			gameState = gameState
 				.withTime(DateTime.Now.ToString())
 				.withCo2(gameState.co2)
@@ -228,5 +277,11 @@ namespace ForestSpirits.Business
 				.withDisaster(disaster, gameState.isDisasterComing);
 			Console.WriteLine("debug");
 		}
+
+		private bool checkField(int row, int column)
+        {
+			return row >= 0 && column >= 0 && row < config.fieldRows && column < config.fieldColumns;
+        }
+
 	}
 }

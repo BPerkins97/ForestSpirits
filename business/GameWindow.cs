@@ -11,7 +11,7 @@ namespace ForestSpirits.Business
 	public class GameState
 	{
 		public readonly string time = "00:00:00";
-		public int co2 = 5000;
+		public readonly int co2 = 5000;
 		public readonly bool isSunCollectable = false;
 		public readonly bool isWaterCollectable = false;
 		public bool isDisasterComing = false;

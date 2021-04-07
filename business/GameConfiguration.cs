@@ -11,5 +11,7 @@
 		public int resourceAdmissionRate = 10;
 		public readonly int co2High = 4000;
 		public readonly int co2Low = 2000;
+		public int co2Reduction = 100;
+		public int co2Increase = 100;
 	}
 }

@@ -6,18 +6,20 @@ namespace ForestSpirits.Business
 	{
 		public float bucked;
 		private double wachstumsrate;
-		private int tiles;
+		private int tiles = 1;
 
-		public void blub()
+		public bool blub()
 		{
 			wachstumsrate = Math.Pow(1.1, tiles);
 			bucked = bucked + tiles * (float)wachstumsrate;
-
-			if (bucked == 2000)
+			Console.WriteLine(bucked);
+			if (bucked >= 20)
 			{
 				tiles = tiles + 1;
 				bucked = 0;
-			};
+				return true;
+			}
+			return false;
 		}
 	}
 }
