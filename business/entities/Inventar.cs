@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Frontend.business
+namespace ForestSpirits.Business
 {
 	public class Inventar
 	{

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ForestSpirits.Business;
-using ForestSpirits.business;
 
 namespace ForestSpirits.Frontend
 {
@@ -52,15 +51,14 @@ namespace ForestSpirits.Frontend
 			Graphics graphics = this.CreateGraphics();
 			graphics.Clear(Color.Gray);
 
-
-			for (int row=0;row<gameState.fields.GetLength(0);row++)
-            {
-				for (int column=0;column<gameState.fields.GetLength(1);column++)
-                {
+			for (int row = 0; row < gameState.fields.GetLength(0); row++)
+			{
+				for (int column = 0; column < gameState.fields.GetLength(1); column++)
+				{
 					FieldType level = gameState.fields[row, column].type;
 					board.drawField(new Coordinate(row, column), level, graphics);
 				}
-            }
+			}
 
 			if (gameState.isSunCollectable)
 			{
@@ -78,6 +76,15 @@ namespace ForestSpirits.Frontend
 					wasserLocation = new Point(MathUtils.random.Next(0, (int)board.getSize().Width - sonneWidth), MathUtils.random.Next(0, (int)board.getSize().Height - sonneWidth));
 				}
 				graphics.DrawImage(wasserImg, wasserLocation);
+			}
+			if (gameState.isDisasterComing)
+			{
+				TimeSpan timeDelta = gameState.currentDisaster.triggerTime - DateTime.Now; // spielzeit implementieren
+				lDisasterWert.Text = timeDelta.ToString();
+			}
+			if (gameState.currentDisaster.wasTriggered)
+			{
+				lDisasterWert.Text = "Katastrophe ausgelöst!";
 			}
 			// Inventar befüllen
 			this.sonne.Text = "Sonne " + gameState.inventar.sun;
@@ -98,29 +105,34 @@ namespace ForestSpirits.Frontend
 			{
 				game.sammleSonne();
 				resetButtons();
-			} else if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
+			}
+			else if (e.X > wasserLocation.X && e.X < wasserLocation.X + sonneWidth && e.Y > wasserLocation.Y && e.Y < wasserLocation.Y + sonneWidth)
 			{
 				game.sammleWasser();
 				resetButtons();
-			} else if (setzlingReady)
+			}
+			else if (setzlingReady)
 			{
 				game.setzlingPflanzen(board.getCoordinates(e.X, e.Y));
 				resetButtons();
-			} else if (sonneNehmen)
+			}
+			else if (sonneNehmen)
 			{
 				game.feedSun(board.getCoordinates(e.X, e.Y));
 				resetButtons();
-			} else if (wasserNehmen)
+			}
+			else if (wasserNehmen)
 			{
 				game.feedWater(board.getCoordinates(e.X, e.Y));
 				resetButtons();
-			} else
-            {
+			}
+			else
+			{
 				Coordinate coord = board.getCoordinates(e.X, e.Y);
 				if (coord.row == -1)
-                {
+				{
 					return;
-                }
+				}
 				Field field = lastGameState.fields[coord.row, coord.column];
 				if (field.type == FieldType.SEEDLING || field.type == FieldType.TREE)
 				{
@@ -167,7 +179,6 @@ namespace ForestSpirits.Frontend
 					this.Controls.Add(contextMenu);
 				}
 			}
-		
 		}
 
 		// wenn geclickt wird, sollen die Buttons nicht "aktiv" bleiben

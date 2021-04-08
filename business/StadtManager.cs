@@ -1,23 +1,25 @@
 ﻿using System;
 
-namespace Frontend.business
+namespace ForestSpirits.Business
 {
-    class StadtManager
-    {
-        public float bucked;
-        private double wachstumsrate;
-        private int tiles;
-        public void blub()
-        {
-            wachstumsrate = Math.Pow(1.1, tiles);
-            bucked = bucked + tiles * (float)wachstumsrate;
+	internal class StadtManager
+	{
+		public float bucked;
+		private double wachstumsrate;
+		private int tiles = 1;
 
-            if (bucked == 2000)
-            {
-                tiles = tiles + 1;
-                bucked = 0;
-            };
-        }
-
-    }
+		public bool blub()
+		{
+			wachstumsrate = Math.Pow(1.1, tiles);
+			bucked = bucked + tiles * (float)wachstumsrate;
+			Console.WriteLine(bucked);
+			if (bucked >= 20)
+			{
+				tiles = tiles + 1;
+				bucked = 0;
+				return true;
+			}
+			return false;
+		}
+	}
 }

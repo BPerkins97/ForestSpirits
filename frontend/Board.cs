@@ -130,6 +130,9 @@ namespace ForestSpirits.Frontend
         internal void drawCity(Coordinate coordinate)
         {
             throw new NotImplementedException();
+
+
+
         }
 
         public float getfieldWidth()
