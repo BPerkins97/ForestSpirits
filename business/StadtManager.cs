@@ -4,21 +4,22 @@ namespace ForestSpirits.Business
 {
 	internal class StadtManager
 	{
-		public float bucked;
-		private double wachstumsrate;
-		private int tiles = 1;
-
-		public bool blub()
+		private GameConfiguration config;
+		public StadtManager ()
+        {
+			config = new GameConfiguration();
+		}
+		public bool wachstum()
 		{
-			wachstumsrate = Math.Pow(1.1, tiles);
-			bucked = bucked + tiles * (float)wachstumsrate;
-			Console.WriteLine(bucked);
-			if (bucked >= 20)
+			config.wachstumsrate = Math.Pow(1, config.tiles);
+			config.bucket = config.bucket + config.tiles * config.wachstumsrate;
+			if (config.bucket >= config.bucketFull)
 			{
-				tiles = tiles + 1;
-				bucked = 0;
+				config.tiles = config.tiles + config.addToTiles;
+				config.bucket = 0;
 				return true;
 			}
+			//Console.WriteLine(config.bucket);
 			return false;
 		}
 	}

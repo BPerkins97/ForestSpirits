@@ -163,6 +163,12 @@ namespace ForestSpirits.Business
 				gameState.isDisasterComing = false;
 			}
 
+            if (config.co2UpdateValue > 0 || config.co2UpdateValue < 0)
+            {
+				gameState = gameState.withCo2(gameState.co2 + config.co2UpdateValue);
+				//Console.WriteLine(config.co2UpdateValue);
+			}
+
 			// Felder durchgehen
 			for (int i = 0; i < fields.GetLength(0); i++)
 			{
@@ -202,6 +208,7 @@ namespace ForestSpirits.Business
 							plant = new Plant();
 							type = FieldType.TREE;
 							updateTreeCount += 1;
+							config.co2UpdateValue -= 10;
 						}
 
 						if (plant.progress == config.resourceMax)
@@ -257,7 +264,7 @@ namespace ForestSpirits.Business
 				disaster = new Disaster();
 			}
 
-			if (Stadt.blub())
+			if (Stadt.wachstum())
             {
 				List<Coordinate> auswahl = new List<Coordinate>();
 				for (int row = 0; row < gameState.fields.GetLength(0); row++)
@@ -300,6 +307,7 @@ namespace ForestSpirits.Business
 					Coordinate newCityCoordinate = auswahl[index];
 					fields[newCityCoordinate.row, newCityCoordinate.column] = fields[newCityCoordinate.row, newCityCoordinate.column].withType(FieldType.CITY);
 					gameState = gameState.withCo2(gameState.co2 + config.co2Increase);
+					config.co2UpdateValue += 10;
 				}
 			}
 			
