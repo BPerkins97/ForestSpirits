@@ -13,5 +13,11 @@
 		public readonly int co2Low = 2000;
 		public int co2Reduction = 100;
 		public int co2Increase = 100;
+		public int co2UpdateValue = 0;
+		public double bucket;
+		public readonly int bucketFull = 60;
+		public double wachstumsrate;
+		public double tiles = 1;
+		public double addToTiles = 0.15;
 	}
 }
