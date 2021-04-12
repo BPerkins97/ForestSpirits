@@ -87,9 +87,9 @@ namespace ForestSpirits.Frontend
 				lDisasterWert.Text = "Katastrophe ausgelöst!";
 			}
 			// Inventar befüllen
-			this.sonne.Text = "Sonne " + gameState.inventar.sun;
-			this.wasser.Text = "Wasser " + gameState.inventar.water;
-			this.setzlinge.Text = "Setzlinge " + gameState.inventar.seedlings;
+			this.sonne.Text = "x" + gameState.inventar.sun;
+			this.wasser.Text = "x" + gameState.inventar.water;
+			this.setzlinge.Text = "x" + gameState.inventar.seedlings;
 			lastGameState = gameState;
 		}
 
@@ -216,5 +216,25 @@ namespace ForestSpirits.Frontend
 		{
 			wasserNehmen = true;
 		}
-	}
+
+        private void lSpielzeitText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lCo2LevelWert_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lDisasterText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lDisasterWert_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

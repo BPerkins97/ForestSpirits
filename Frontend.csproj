@@ -97,5 +97,17 @@
   <ItemGroup>
     <None Include="Resources\download.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="static\wasser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="static\sonne.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="static\setzling.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="static\mushroom.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
