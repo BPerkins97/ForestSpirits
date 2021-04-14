@@ -9,10 +9,12 @@ const progressBarWater = document.getElementById("progress-bar-water");
 const progressBarSun = document.getElementById("progress-bar-sun");
 const progressBarProgress = document.getElementById("progress-bar-progress");
 const fieldContextInfo = document.getElementById("field-context-info");
+const gameInfoCo2 = document.getElementById("game-info-co2");
+const gameInfoTime = document.getElementById("game-info-time");
 fieldContextInfo.style.display = "none";
 
 const GAME_CONFIG = {
-    resourceAdmissionRate: 10
+    resourceAdmissionRate: 100
 };
 
 const WIDTH_TO_HEIGHT = 829.0 / 718.0;
@@ -169,6 +171,8 @@ function reduceInventarSun() {
 
 async function gameLoop() {
     initField();
+    updateField(toCoordinate(0, 0), "field-seedling");
+    updateField(toCoordinate(FIELD_ROWS-1, FIELD_COLUMNS-1), "field-city");
     for (let i = 0;i<100;i++) {
         lastGameState = JSON.parse(JSON.stringify(gameState));
         fieldContainer.children = [];
@@ -181,14 +185,66 @@ async function gameLoop() {
 function update() {
     gameState.isSun = lastGameState.isSun || Math.random() < 1;
     gameState.isWater = lastGameState.isWater || Math.random() < 1;
+    if (Math.random() < 0.1) {
+        expandCity();
+    }
     for (let i=0;i<fields.length;i++) {
         for (let j=0;j<fields[i].length;j++) {
             if (fields[i][j].type === "field-seedling") {
-                if (fields[i][j].sun >= 100 && fields[i][j].water >= 100) {
+                if (fields[i][j].progress >= 100) {
+                    updateField(toCoordinate(i, j), "field-tree");
+                } else if (fields[i][j].sun >= 100 && fields[i][j].water >= 100) {
                     fields[i][j].progress = Math.min(fields[i][j].progress + GAME_CONFIG.resourceAdmissionRate, 100);
                 } else {
                     fields[i][j].sun = Math.min(fields[i][j].sun + GAME_CONFIG.resourceAdmissionRate, 100);
                     fields[i][j].water = Math.min(fields[i][j].water + GAME_CONFIG.resourceAdmissionRate, 100);
+                }
+            }
+        }
+    }
+}
+
+// TODO das hier besser machen, dass die stadt in alle Richtungen ausbreitet
+function expandCity() {
+    for (let i=0;i<fields.length;i++) {
+        for (let j=0;j<fields[i].length;j++) {
+            if (fields[i][j].type === "field-city") {
+                if (i-1 >= 0) {
+                    if (fields[i-1][j].type === "field-normal") {
+                        updateField(toCoordinate(i-1,j), "field-city");
+                        return;
+                    }
+                    if (j+1 < FIELD_COLUMNS) {
+                        if (fields[i-1][j+1].type === "field-normal") {
+                            updateField(toCoordinate(i-1,j+1), "field-city");
+                            return;
+                        }
+                    }
+                }
+                if (j-1 >= 0) {
+                    if (fields[i][j-1].type === "field-normal") {
+                        updateField(toCoordinate(i,j-1), "field-city");
+                        return;
+                    }
+                }
+                if (j+1 < FIELD_COLUMNS) {
+                    if (fields[i][j+1].type === "field-normal") {
+                        updateField(toCoordinate(i,j+1), "field-city");
+                        return;
+                    }
+                }
+                if (i+1 < FIELD_ROWS) {
+                    if (fields[i+1][j].type === "field-normal") {
+                        updateField(toCoordinate(i+1,j), "field-city");
+                        return;
+                    }
+                    if (j+1 < FIELD_COLUMNS) {
+                        if (fields[i+1][j+1].type === "field-normal") {
+                            updateField(toCoordinate(i+1,j+1), "field-city");
+                            return;
+                        }
+                    
+                    }
                 }
             }
         }

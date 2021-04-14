@@ -67,6 +67,20 @@
     height: 200px;
     right: 0;
     top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: large;
+    padding: 20px;
+}
+
+.bold-font {
+    font-weight: 800;
+}
+
+#game-information-container div {
+    display: flex;
+    justify-content: space-between;
 }
 
 .drag {
@@ -96,6 +110,14 @@
 
 .field-ripe {
     background-image: url("../img/field_ripe.png");
+}
+
+.field-tree {
+    background-image: url("../img/field_tree.png");
+}
+
+.field-city {
+    background-image: url("../img/field_city.png");
 }
 
 .sun {
