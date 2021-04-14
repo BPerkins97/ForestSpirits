@@ -21,8 +21,17 @@
     right: 0;
 }
 
-#field-container div {
+#field-container div, #field-context-info {
     position:absolute;
+}
+
+#field-context-info {
+    z-index: 100;
+    background-color: beige;
+    border-radius: 20px;
+    border-top-left-radius: 0;
+    border: 3px solid brown;
+    padding: 20px;
 }
 
 #inventar-container, #game-information-container {
@@ -60,9 +69,20 @@
     top: 10vh;
 }
 
+.drag {
+    z-index: 9999;
+    position: absolute;
+}
+
+.resource {
+    z-index: 100;
+    position: absolute;
+}
+
 .field {
     height: 115px;
     width: 100px;
+    z-index: 90;
     background-size: 100px 115px;
 }
 
@@ -90,4 +110,15 @@
     height: 125px;
     background-size: 80px 125px;
     background-image: url("../img/wasser.png");
+}
+
+.seedling {
+    width: 60px;
+    height: 100px;
+    background-size: 60px 100px;
+    background-image: url("../img/seedling.png");
+}
+
+.field-seedling {
+    background-image: url("../img/field_seedling.png");
 }

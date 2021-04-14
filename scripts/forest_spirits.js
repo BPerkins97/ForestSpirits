@@ -3,6 +3,17 @@ const fieldContainer = document.getElementById("field-container");
 const inventarElement = document.getElementById("inventar-container");
 const inventarWaterCounter = document.getElementById("inventar-water");
 const inventarSunCounter = document.getElementById("inventar-sun");
+const inventarSeedlingCounter = document.getElementById("inventar-seedling");
+
+const progressBarWater = document.getElementById("progress-bar-water");
+const progressBarSun = document.getElementById("progress-bar-sun");
+const progressBarProgress = document.getElementById("progress-bar-progress");
+const fieldContextInfo = document.getElementById("field-context-info");
+fieldContextInfo.style.display = "none";
+
+const GAME_CONFIG = {
+    resourceAdmissionRate: 10
+};
 
 const WIDTH_TO_HEIGHT = 829.0 / 718.0;
 const FIELD_WIDTH = 100.0;
@@ -18,7 +29,8 @@ let gameState = {
     isWater: false,
     inventar: {
         sun: 0,
-        water: 0
+        water: 0,
+        seedling: 3
     }
 };
 let drag = undefined;
@@ -31,33 +43,69 @@ fieldContainer.addEventListener("mousemove", function(event) {
 });
 
 fieldContainer.addEventListener("click", function(event) {
+    fieldContextInfo.style.display = "none";
     const coordinate = pointToCoordinate(toPoint(event.x, event.y));
+    if (!coordinate) {
+        if (drag) {
+            fieldContainer.removeChild(drag.element);
+        }
+        return;
+    }
     if (drag) {
-        
         if (drag.type === "sun") {
             reduceInventarSun();
-            fields[coordinate.row][coordinate.column].sun++;         
-        }
-        if (drag.type === "water") {
-
+            fields[coordinate.row][coordinate.column].sun += 50;
+            updateFieldType(coordinate);         
+        } else if (drag.type === "water") {
             reduceInventarWater();
-            fields[coordinate.row][coordinate.column].water++;
+            fields[coordinate.row][coordinate.column].water += 50;
+            updateFieldType(coordinate);   
+        } else if (drag.type === "seedling" && fields[coordinate.row][coordinate.column].type === "field-ripe") {
+            reduceInventarSeedling();
+            updateField(coordinate, "field-seedling");
         }
 
-        if (fields[coordinate.row][coordinate.column].water > 0 && fields[coordinate.row][coordinate.column].sun > 0) {
-            const type = fields[coordinate.row][coordinate.column].type;
-            fields[coordinate.row][coordinate.column].sun--
-            fields[coordinate.row][coordinate.column].water--
-            if (type === "field-normal") {
-                updateField(coordinate, "field-half-ripe");
-            } else if (type === "field-half-ripe") {
-                updateField(coordinate, "field-ripe");
-            }            
-        }
         fieldContainer.removeChild(drag.element);
         drag = undefined;
+    } else if (isField(event.target)) {
+        progressBarSun.value = fields[coordinate.row][coordinate.column].sun;
+        progressBarWater.value = fields[coordinate.row][coordinate.column].water;
+        progressBarProgress.value = fields[coordinate.row][coordinate.column].progress;
+        fieldContextInfo.style.top = event.y + "px";
+        fieldContextInfo.style.left = event.x + "px";
+        fieldContextInfo.style.display = "block";
+    } else {
+
     }
 });
+
+function isField(element) {
+    const classes = element.classList;
+    for (let i=0;i<classes.length;i++) {
+        if (classes[i] === "field") {
+            return true;
+        }
+    }
+    return false;
+}
+
+function reduceInventarSeedling() {
+    gameState.inventar.seedling--;
+    inventarSeedlingCounter.innerText = gameState.inventar.seedling;
+}
+
+function updateFieldType(coordinate) {
+    if (fields[coordinate.row][coordinate.column].water > 0 && fields[coordinate.row][coordinate.column].sun > 0) {
+        const type = fields[coordinate.row][coordinate.column].type;
+        fields[coordinate.row][coordinate.column].sun -= 50;
+        fields[coordinate.row][coordinate.column].water -= 50;
+        if (type === "field-normal") {
+            updateField(coordinate, "field-half-ripe");
+        } else if (type === "field-half-ripe") {
+            updateField(coordinate, "field-ripe");
+        }            
+    }
+}
 
 document.getElementById("inventar-sun-container").addEventListener("click", function(event) {
     if (gameState.inventar.sun <= 0) {
@@ -65,14 +113,12 @@ document.getElementById("inventar-sun-container").addEventListener("click", func
     }
     let element = document.createElement("div");
     element.classList.add("sun");
-    element.style.position = "absolute";
+    element.classList.add("drag");
     element.style.top = event.y + "px";
     element.style.left = event.x + "px";
-    element.style.zIndex = 9999;
     drag = {
         element: element,
-        type: "sun",
-        isDragging: true
+        type: "sun"
     }
     fieldContainer.appendChild(element);
 });
@@ -83,14 +129,28 @@ document.getElementById("inventar-water-container").addEventListener("click", fu
     }
     let element = document.createElement("div");
     element.classList.add("water");
-    element.style.position = "absolute";
+    element.classList.add("drag");
     element.style.top = event.y + "px";
     element.style.left = event.x + "px";
-    element.style.zIndex = 9999;
     drag = {
         element: element,
-        type: "water",
-        isDragging: true
+        type: "water"
+    }
+    fieldContainer.appendChild(element);
+});
+
+document.getElementById("inventar-seedling-container").addEventListener("click", function(event) {
+    if (gameState.inventar.seedling <= 0) {
+        return;
+    }
+    let element = document.createElement("div");
+    element.classList.add("seedling");
+    element.classList.add("drag");
+    element.style.top = event.y + "px";
+    element.style.left = event.x + "px";
+    drag = {
+        element: element,
+        type: "seedling"
     }
     fieldContainer.appendChild(element);
 });
@@ -120,7 +180,19 @@ async function gameLoop() {
 
 function update() {
     gameState.isSun = lastGameState.isSun || Math.random() < 1;
-    gameState.isWater = lastGameState.isWater || Math.random() < 0.5;
+    gameState.isWater = lastGameState.isWater || Math.random() < 1;
+    for (let i=0;i<fields.length;i++) {
+        for (let j=0;j<fields[i].length;j++) {
+            if (fields[i][j].type === "field-seedling") {
+                if (fields[i][j].sun >= 100 && fields[i][j].water >= 100) {
+                    fields[i][j].progress = Math.min(fields[i][j].progress + GAME_CONFIG.resourceAdmissionRate, 100);
+                } else {
+                    fields[i][j].sun = Math.min(fields[i][j].sun + GAME_CONFIG.resourceAdmissionRate, 100);
+                    fields[i][j].water = Math.min(fields[i][j].water + GAME_CONFIG.resourceAdmissionRate, 100);
+                }
+            }
+        }
+    }
 }
 
 function Sleep(milliseconds) {
@@ -129,10 +201,12 @@ function Sleep(milliseconds) {
 
 function redraw() {
     if (gameState.isSun && !lastGameState.isSun) {
+        console.log("hello");
         let point = coordinateToPoint(toCoordinate(FIELD_ROWS, FIELD_COLUMNS));
         point = toPoint(Math.random() * point.x, Math.random() * point.y);
         let temp = document.createElement("div");
         temp.classList.add("sun");
+        temp.classList.add("resource");
         temp.id = "sun";
         temp.style.top = point.y + "px";
         temp.style.left = point.x + "px";
@@ -144,11 +218,17 @@ function redraw() {
         point = toPoint(Math.random() * point.x, Math.random() * point.y);
         let temp = document.createElement("div");
         temp.classList.add("water");
+        temp.classList.add("resource");
         temp.id = "water";
         temp.style.top = point.y + "px";
         temp.style.left = point.x + "px";
         temp.addEventListener("click", collectWater);
         fieldContainer.appendChild(temp);
+    }
+    for (let i=0;i<fields.length;i++) {
+        for (let j=0;j<fields[i].length;j++) {
+            updateField(toCoordinate(i, j), fields[i][j].type);
+        }
     }
 }
 
@@ -174,6 +254,7 @@ function initField() {
                 element: undefined,
                 sun: 0,
                 water: 0,
+                progress: 0,
                 type: "field-normal"
             };
             updateField(toCoordinate(i, j), "field-normal");
