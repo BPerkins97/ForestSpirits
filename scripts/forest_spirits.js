@@ -188,13 +188,14 @@ async function gameLoop() {
     initField();
     updateField(toCoordinate(0, 0), "field-seedling");
     updateField(toCoordinate(FIELD_ROWS-1, FIELD_COLUMNS-1), "field-city");
-    for (let i = 0;i<100;i++) {
+    while (co2 > 0 && co2 < 10000) {
         lastGameState = JSON.parse(JSON.stringify(gameState));
         fieldContainer.children = [];
         update();
         redraw();
         await Sleep(1000.0);
     }
+    // TODO win game lose game
 }
 
 function update() {
