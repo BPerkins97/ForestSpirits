@@ -14,7 +14,15 @@ const gameInfoTime = document.getElementById("game-info-time");
 fieldContextInfo.style.display = "none";
 
 const GAME_CONFIG = {
-    resourceAdmissionRate: 100
+    resourceAdmissionRate: 100,
+    co2Start: 5000,
+    city: {
+        co2Production: 50
+    },
+    tree: {
+        resourceAdmissionRate: 100,
+        co2Downsizing: 50
+    }
 };
 
 const WIDTH_TO_HEIGHT = 829.0 / 718.0;
@@ -29,6 +37,7 @@ let lastGameState = {};
 let gameState = {
     isSun: false,
     isWater: false,
+    co2: 5000,
     inventar: {
         sun: 0,
         water: 0,
@@ -89,6 +98,12 @@ function isField(element) {
         }
     }
     return false;
+}
+
+function addToCo2(co2) {
+    const newCo2 = Math.min(Math.max(gameState.co2 + co2, 0), 10000);
+    gameState.co2 = newCo2;
+    gameInfoCo2.innerText = newCo2;
 }
 
 function reduceInventarSeedling() {
@@ -188,6 +203,8 @@ function update() {
     if (Math.random() < 0.1) {
         expandCity();
     }
+    let treeCounter = 0;
+    let cityCounter = 0;
     for (let i=0;i<fields.length;i++) {
         for (let j=0;j<fields[i].length;j++) {
             if (fields[i][j].type === "field-seedling") {
@@ -199,9 +216,14 @@ function update() {
                     fields[i][j].sun = Math.min(fields[i][j].sun + GAME_CONFIG.resourceAdmissionRate, 100);
                     fields[i][j].water = Math.min(fields[i][j].water + GAME_CONFIG.resourceAdmissionRate, 100);
                 }
+            } else if (fields[i][j].type === "field-tree") {
+                treeCounter++;
+            } else if (fields[i][j].type === "field-city") {
+                cityCounter++;
             }
         }
     }
+    addToCo2(-1 * treeCounter * GAME_CONFIG.tree.co2Downsizing + cityCounter * GAME_CONFIG.city.co2Production);
 }
 
 // TODO das hier besser machen, dass die stadt in alle Richtungen ausbreitet
@@ -257,7 +279,6 @@ function Sleep(milliseconds) {
 
 function redraw() {
     if (gameState.isSun && !lastGameState.isSun) {
-        console.log("hello");
         let point = coordinateToPoint(toCoordinate(FIELD_ROWS, FIELD_COLUMNS));
         point = toPoint(Math.random() * point.x, Math.random() * point.y);
         let temp = document.createElement("div");
