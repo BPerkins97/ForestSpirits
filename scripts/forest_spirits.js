@@ -13,38 +13,30 @@ const gameInfoCo2 = document.getElementById("game-info-co2");
 const gameInfoTime = document.getElementById("game-info-time");
 fieldContextInfo.style.display = "none";
 
-const GAME_CONFIG = {
-    resourceAdmissionRate: 100,
-    co2Start: 5000,
-    city: {
-        co2Production: 50
-    },
-    tree: {
-        resourceAdmissionRate: 100,
-        co2Downsizing: 50
-    }
-};
-
 const WIDTH_TO_HEIGHT = 829.0 / 718.0;
 const FIELD_WIDTH = 100.0;
 const FIELD_HEIGHT = FIELD_WIDTH * WIDTH_TO_HEIGHT;
 const FIELD_HEIGHT_DIFF = FIELD_HEIGHT * 0.75;
-const FIELD_ROWS = 7;
-const FIELD_COLUMNS = 10;
 
-let fields = [];
-let lastGameState = {};
-let gameState = {
-    isSun: false,
-    isWater: false,
-    co2: 5000,
-    inventar: {
-        sun: 0,
-        water: 0,
-        seedling: 3
+let fieldElements;
+let lastGameState;
+let gameState;
+let drag = null;
+
+play();
+
+async function play () {
+    forestSpiritsAPI.initialize(gameSettings);
+    gameState = forestSpiritsAPI.getGameState();
+    initfieldElements();
+    while (!forestSpiritsAPI.isGameOver()) {
+        lastGameState = JSON.parse(JSON.stringify(gameState));;
+        forestSpiritsAPI.tick();
+        gameState = forestSpiritsAPI.getGameState();
+        redraw();
+        await Sleep(100.0);
     }
-};
-let drag = undefined;
+}
 
 fieldContainer.addEventListener("mousemove", function(event) {
     if(drag) {
@@ -64,24 +56,19 @@ fieldContainer.addEventListener("click", function(event) {
     }
     if (drag) {
         if (drag.type === "sun") {
-            reduceInventarSun();
-            fields[coordinate.row][coordinate.column].sun += 50;
-            updateFieldType(coordinate);         
+            forestSpiritsAPI.feedSun(coordinate.row, coordinate.column);       
         } else if (drag.type === "water") {
-            reduceInventarWater();
-            fields[coordinate.row][coordinate.column].water += 50;
-            updateFieldType(coordinate);   
-        } else if (drag.type === "seedling" && fields[coordinate.row][coordinate.column].type === "field-ripe") {
-            reduceInventarSeedling();
-            updateField(coordinate, "field-seedling");
+            forestSpiritsAPI.feedWater(coordinate.row, coordinate.column);  
+        } else if (drag.type === "seedling" && gameState.fields[coordinate.row][coordinate.column].type === forestSpiritsConstants.fieldTypes.ripe) {
+            forestSpiritsAPI.plantSeedling(coordinate.row, coordinate.column);
         }
 
         fieldContainer.removeChild(drag.element);
         drag = undefined;
     } else if (isField(event.target)) {
-        progressBarSun.value = fields[coordinate.row][coordinate.column].sun;
-        progressBarWater.value = fields[coordinate.row][coordinate.column].water;
-        progressBarProgress.value = fields[coordinate.row][coordinate.column].progress;
+        progressBarSun.value = gameState.fields[coordinate.row][coordinate.column].sun;
+        progressBarWater.value = gameState.fields[coordinate.row][coordinate.column].water;
+        progressBarProgress.value = gameState.fields[coordinate.row][coordinate.column].progress;
         fieldContextInfo.style.top = event.y + "px";
         fieldContextInfo.style.left = event.x + "px";
         fieldContextInfo.style.display = "block";
@@ -98,30 +85,6 @@ function isField(element) {
         }
     }
     return false;
-}
-
-function addToCo2(co2) {
-    const newCo2 = Math.min(Math.max(gameState.co2 + co2, 0), 10000);
-    gameState.co2 = newCo2;
-    gameInfoCo2.innerText = newCo2;
-}
-
-function reduceInventarSeedling() {
-    gameState.inventar.seedling--;
-    inventarSeedlingCounter.innerText = gameState.inventar.seedling;
-}
-
-function updateFieldType(coordinate) {
-    if (fields[coordinate.row][coordinate.column].water > 0 && fields[coordinate.row][coordinate.column].sun > 0) {
-        const type = fields[coordinate.row][coordinate.column].type;
-        fields[coordinate.row][coordinate.column].sun -= 50;
-        fields[coordinate.row][coordinate.column].water -= 50;
-        if (type === "field-normal") {
-            updateField(coordinate, "field-half-ripe");
-        } else if (type === "field-half-ripe") {
-            updateField(coordinate, "field-ripe");
-        }            
-    }
 }
 
 document.getElementById("inventar-sun-container").addEventListener("click", function(event) {
@@ -172,115 +135,17 @@ document.getElementById("inventar-seedling-container").addEventListener("click",
     fieldContainer.appendChild(element);
 });
 
-gameLoop();
-
-function reduceInventarWater() {
-    gameState.inventar.water--;
-    inventarWaterCounter.innerText = gameState.inventar.water;
-}
-
-function reduceInventarSun() {
-    gameState.inventar.sun--;
-    inventarSunCounter.innerText = gameState.inventar.sun;
-}
-
-async function gameLoop() {
-    initField();
-    updateField(toCoordinate(0, 0), "field-seedling");
-    updateField(toCoordinate(FIELD_ROWS-1, FIELD_COLUMNS-1), "field-city");
-    while (co2 > 0 && co2 < 10000) {
-        lastGameState = JSON.parse(JSON.stringify(gameState));
-        fieldContainer.children = [];
-        update();
-        redraw();
-        await Sleep(1000.0);
-    }
-    // TODO win game lose game
-}
-
-function update() {
-    gameState.isSun = lastGameState.isSun || Math.random() < 1;
-    gameState.isWater = lastGameState.isWater || Math.random() < 1;
-    if (Math.random() < 0.1) {
-        expandCity();
-    }
-    let treeCounter = 0;
-    let cityCounter = 0;
-    for (let i=0;i<fields.length;i++) {
-        for (let j=0;j<fields[i].length;j++) {
-            if (fields[i][j].type === "field-seedling") {
-                if (fields[i][j].progress >= 100) {
-                    updateField(toCoordinate(i, j), "field-tree");
-                } else if (fields[i][j].sun >= 100 && fields[i][j].water >= 100) {
-                    fields[i][j].progress = Math.min(fields[i][j].progress + GAME_CONFIG.resourceAdmissionRate, 100);
-                } else {
-                    fields[i][j].sun = Math.min(fields[i][j].sun + GAME_CONFIG.resourceAdmissionRate, 100);
-                    fields[i][j].water = Math.min(fields[i][j].water + GAME_CONFIG.resourceAdmissionRate, 100);
-                }
-            } else if (fields[i][j].type === "field-tree") {
-                treeCounter++;
-            } else if (fields[i][j].type === "field-city") {
-                cityCounter++;
-            }
-        }
-    }
-    addToCo2(-1 * treeCounter * GAME_CONFIG.tree.co2Downsizing + cityCounter * GAME_CONFIG.city.co2Production);
-}
-
-// TODO das hier besser machen, dass die stadt in alle Richtungen ausbreitet
-function expandCity() {
-    for (let i=0;i<fields.length;i++) {
-        for (let j=0;j<fields[i].length;j++) {
-            if (fields[i][j].type === "field-city") {
-                if (i-1 >= 0) {
-                    if (fields[i-1][j].type === "field-normal") {
-                        updateField(toCoordinate(i-1,j), "field-city");
-                        return;
-                    }
-                    if (j+1 < FIELD_COLUMNS) {
-                        if (fields[i-1][j+1].type === "field-normal") {
-                            updateField(toCoordinate(i-1,j+1), "field-city");
-                            return;
-                        }
-                    }
-                }
-                if (j-1 >= 0) {
-                    if (fields[i][j-1].type === "field-normal") {
-                        updateField(toCoordinate(i,j-1), "field-city");
-                        return;
-                    }
-                }
-                if (j+1 < FIELD_COLUMNS) {
-                    if (fields[i][j+1].type === "field-normal") {
-                        updateField(toCoordinate(i,j+1), "field-city");
-                        return;
-                    }
-                }
-                if (i+1 < FIELD_ROWS) {
-                    if (fields[i+1][j].type === "field-normal") {
-                        updateField(toCoordinate(i+1,j), "field-city");
-                        return;
-                    }
-                    if (j+1 < FIELD_COLUMNS) {
-                        if (fields[i+1][j+1].type === "field-normal") {
-                            updateField(toCoordinate(i+1,j+1), "field-city");
-                            return;
-                        }
-                    
-                    }
-                }
-            }
-        }
-    }
-}
-
 function Sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
 function redraw() {
+    inventarSunCounter.innerText = gameState.inventar.sun;
+    inventarWaterCounter.innerText = gameState.inventar.water;
+    inventarSeedlingCounter.innerText = gameState.inventar.seedlings;
+    gameInfoCo2.innerText = gameState.co2;
     if (gameState.isSun && !lastGameState.isSun) {
-        let point = coordinateToPoint(toCoordinate(FIELD_ROWS, FIELD_COLUMNS));
+        let point = coordinateToPoint(toCoordinate(gameSettings.boardSize.rows, gameSettings.boardSize.columns));
         point = toPoint(Math.random() * point.x, Math.random() * point.y);
         let temp = document.createElement("div");
         temp.classList.add("sun");
@@ -292,7 +157,7 @@ function redraw() {
         fieldContainer.appendChild(temp);
     }
     if (gameState.isWater && !lastGameState.isWater) {
-        let point = coordinateToPoint(toCoordinate(FIELD_ROWS, FIELD_COLUMNS));
+        let point = coordinateToPoint(toCoordinate(gameSettings.boardSize.rows, gameSettings.boardSize.columns));
         point = toPoint(Math.random() * point.x, Math.random() * point.y);
         let temp = document.createElement("div");
         temp.classList.add("water");
@@ -303,46 +168,40 @@ function redraw() {
         temp.addEventListener("click", collectWater);
         fieldContainer.appendChild(temp);
     }
-    for (let i=0;i<fields.length;i++) {
-        for (let j=0;j<fields[i].length;j++) {
-            updateField(toCoordinate(i, j), fields[i][j].type);
+    for (let i=0;i<fieldElements.length;i++) {
+        for (let j=0;j<fieldElements[i].length;j++) {
+            if (gameState.fields[i][j].type != lastGameState.fields[i][j].type) {
+                updateField(toCoordinate(i, j), gameState.fields[i][j].type);
+            }
         }
     }
 }
 
 function collectSun(event) {
     fieldContainer.removeChild(event.srcElement);
-    gameState.inventar.sun++;
+    forestSpiritsAPI.collectSun();
     gameState.isSun = false;
-    inventarSunCounter.innerText = gameState.inventar.sun;
 }
 
 function collectWater(event) {
     fieldContainer.removeChild(event.srcElement);
-    gameState.inventar.water++;
+    forestSpiritsAPI.collectWater();
     gameState.isWater = false;
-    inventarWaterCounter.innerText = gameState.inventar.water;
 }
 
-function initField() {
-    for (let i=0;i<FIELD_ROWS;i++) {
-        fields[i] = [];
-        for (let j=0;j<FIELD_COLUMNS;j++) {
-            fields[i][j] = {
-                element: undefined,
-                sun: 0,
-                water: 0,
-                progress: 0,
-                type: "field-normal"
-            };
-            updateField(toCoordinate(i, j), "field-normal");
+function initfieldElements() {
+    fieldElements = [];
+    for (let i=0;i<gameSettings.boardSize.rows;i++) {
+        fieldElements[i] = [];
+        for (let j=0;j<gameSettings.boardSize.columns;j++) {
+            updateField(toCoordinate(i, j), gameState.fields[i][j].type);
         }
     }
 }
 
 function updateField(coordinate, fieldType) {
-    if (fields[coordinate.row][coordinate.column].element) {
-        fieldContainer.removeChild(fields[coordinate.row][coordinate.column].element);
+    if (fieldElements[coordinate.row][coordinate.column]) {
+        fieldContainer.removeChild(fieldElements[coordinate.row][coordinate.column]);
     }
     let temp = document.createElement("div");
     temp.classList.add("field");
@@ -351,8 +210,7 @@ function updateField(coordinate, fieldType) {
     temp.style.top = point.y + "px";
     temp.style.left = point.x + "px";
     fieldContainer.appendChild(temp);
-    fields[coordinate.row][coordinate.column].element = temp;
-    fields[coordinate.row][coordinate.column].type = fieldType;
+    fieldElements[coordinate.row][coordinate.column] = temp;
 }
 
 function coordinateToPoint(coordinate) {
@@ -384,8 +242,8 @@ function toPoint(x, y) {
 }
 
 function pointToCoordinate(point) {
-    for (let row=0;row<FIELD_ROWS;row++) {
-        for (let column=0;column<FIELD_COLUMNS;column++) {
+    for (let row=0;row<gameSettings.boardSize.rows;row++) {
+        for (let column=0;column<gameSettings.boardSize.rows;column++) {
             if (hasBeenClicked(row, column, point)) {
                 return toCoordinate(row, column);
             }
