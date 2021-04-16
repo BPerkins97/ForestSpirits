@@ -80,11 +80,22 @@ namespace ForestSpirits.Frontend
 			if (gameState.isDisasterComing)
 			{
 				TimeSpan timeDelta = gameState.currentDisaster.triggerTime - DateTime.Now; // spielzeit implementieren
-				lDisasterWert.Text = timeDelta.ToString();
+				lDisasterTimeWert.Text = timeDelta.ToString();
+
+				switch (gameState.currentDisaster.disasterType)
+				{
+					case DisasterType.HEATWAVE:
+						lDisasterTypeWert.Text = "Hitzewelle";
+						break;
+
+					case DisasterType.RAINFALL:
+						lDisasterTypeWert.Text = "Regenschauer";
+						break;
+				}
 			}
 			if (gameState.currentDisaster.wasTriggered)
 			{
-				lDisasterWert.Text = "Katastrophe ausgelöst!";
+				lDisasterTimeWert.Text = "Katastrophe ausgelöst!";
 			}
 			// Inventar befüllen
 			this.sonne.Text = "x" + gameState.inventar.sun;
@@ -217,24 +228,20 @@ namespace ForestSpirits.Frontend
 			wasserNehmen = true;
 		}
 
-        private void lSpielzeitText_Click(object sender, EventArgs e)
-        {
+		private void lSpielzeitText_Click(object sender, EventArgs e)
+		{
+		}
 
-        }
+		private void lCo2LevelWert_Click(object sender, EventArgs e)
+		{
+		}
 
-        private void lCo2LevelWert_Click(object sender, EventArgs e)
-        {
+		private void lDisasterText_Click(object sender, EventArgs e)
+		{
+		}
 
-        }
-
-        private void lDisasterText_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lDisasterWert_Click(object sender, EventArgs e)
-        {
-
-        }
-    }
+		private void lDisasterWert_Click(object sender, EventArgs e)
+		{
+		}
+	}
 }

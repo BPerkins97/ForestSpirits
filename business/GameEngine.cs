@@ -65,17 +65,17 @@ namespace ForestSpirits.Business
 			}
 		}
 
-        public void feedSun(Coordinate location)
-        {
-            if (inventar.sun > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
-            {
+		public void feedSun(Coordinate location)
+		{
+			if (inventar.sun > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
+			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
 				inventar = inventar.withSun(inventar.sun - 1);
 				updateFieldType(location);
 			}
 			else if (fields[location.row, location.column].type == FieldType.SEEDLING || fields[location.row, location.column].type == FieldType.TREE)
-            {
+			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
 				inventar = inventar.withSun(inventar.sun - 1);
@@ -92,7 +92,6 @@ namespace ForestSpirits.Business
 							.withPlant(plant)
 							.withType(type);
 			}
-
 		}
 
 		public void feedWater(Coordinate location)
@@ -125,7 +124,7 @@ namespace ForestSpirits.Business
 		}
 
 		private void updateFieldType(Coordinate coord)
-        {
+		{
 			int sun = fields[coord.row, coord.column].sunStorage;
 			int water = fields[coord.row, coord.column].waterStorage;
 			FieldType type = fields[coord.row, coord.column].type;
@@ -163,8 +162,8 @@ namespace ForestSpirits.Business
 				gameState.isDisasterComing = false;
 			}
 
-            if (config.co2UpdateValue > 0 || config.co2UpdateValue < 0)
-            {
+			if (config.co2UpdateValue > 0 || config.co2UpdateValue < 0)
+			{
 				gameState = gameState.withCo2(gameState.co2 + config.co2UpdateValue);
 				//Console.WriteLine(config.co2UpdateValue);
 			}
@@ -225,7 +224,7 @@ namespace ForestSpirits.Business
 
 						if (disaster.wasTriggered)
 						{
-							field = field.withPlant(disaster.damagePlant(field.plant));
+							plant = disaster.influencePlant(field.plant);
 						}
 
 						fields[i, j] = field
@@ -238,7 +237,7 @@ namespace ForestSpirits.Business
 					{
 						if (disaster.wasTriggered)
 						{
-							field = disaster.damageField(field);
+							field = disaster.influenceField(field);
 						}
 
 						fields[i, j] = field;
@@ -248,13 +247,13 @@ namespace ForestSpirits.Business
 
 			if (gameState.co2 >= co2High && !gameState.isDisasterComing)
 			{
-				disaster = new Disaster(DisasterType.HEATWAVE, DisasterIntensity.HIGH);
+				disaster = new Disaster(DisasterIntensity.HIGH, config);
 				gameState.isDisasterComing = true;
 			}
 
 			if (gameState.co2 >= co2Low && !gameState.isDisasterComing)
 			{
-				disaster = new Disaster(DisasterType.HEATWAVE, DisasterIntensity.LOW);
+				disaster = new Disaster(DisasterIntensity.LOW, config);
 				gameState.isDisasterComing = true;
 			}
 
@@ -265,7 +264,7 @@ namespace ForestSpirits.Business
 			}
 
 			if (Stadt.wachstum())
-            {
+			{
 				List<Coordinate> auswahl = new List<Coordinate>();
 				for (int row = 0; row < gameState.fields.GetLength(0); row++)
 				{
@@ -273,9 +272,9 @@ namespace ForestSpirits.Business
 					{
 						FieldType level = gameState.fields[row, column].type;
 						if (level == FieldType.CITY)
-                        {
-							if(checkField(row - 1, column) && gameState.fields[row - 1, column].type == FieldType.NORMAL)
-                            {
+						{
+							if (checkField(row - 1, column) && gameState.fields[row - 1, column].type == FieldType.NORMAL)
+							{
 								auswahl.Add(new Coordinate(row - 1, column));
 							}
 							if (checkField(row - 1, column + 1) && gameState.fields[row + 1, column - 1].type == FieldType.NORMAL)
@@ -310,7 +309,6 @@ namespace ForestSpirits.Business
 					config.co2UpdateValue += 10;
 				}
 			}
-			
 
 			gameState = gameState
 				.withTime(DateTime.Now.ToString())
@@ -324,9 +322,8 @@ namespace ForestSpirits.Business
 		}
 
 		private bool checkField(int row, int column)
-        {
+		{
 			return row >= 0 && column >= 0 && row < config.fieldRows && column < config.fieldColumns;
-        }
-
+		}
 	}
 }

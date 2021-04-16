@@ -1,53 +1,72 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ForestSpirits.Business
 {
 	public class Disaster
 	{
-		public readonly DisasterType type;
+		public readonly DisasterType disasterType;
 		public readonly DisasterIntensity intensity;
+		public readonly int disasterEffect;
 		public int ressourceModifier;
 		public bool wasTriggered = false;
 		public readonly DateTime creationTime;
 		public DateTime triggerTime;
+		private Random random = new Random();
 
 		public Disaster()
 		{
 		}
 
-		public Disaster(DisasterType type, DisasterIntensity intensity)
+		public Disaster(DisasterIntensity intensity, GameConfiguration config)
 		{
-			this.type = type;
 			this.intensity = intensity;
 			creationTime = DateTime.Now;
+			// Cast random coinflip to Disaster type enum
+			disasterType = (DisasterType)random.Next(1, 3);
 
-			switch (intensity) // implement config for times
+			switch (intensity)
 			{
 				case DisasterIntensity.HIGH:
-					triggerTime = creationTime + new TimeSpan(0, 0, 20);
-					ressourceModifier = 500;
+					triggerTime = creationTime + new TimeSpan(0, 0, config.timeToDisasterHigh);
+					disasterEffect = config.disasterEffectHigh;
+
 					break;
 
 				case DisasterIntensity.LOW:
-					triggerTime = creationTime + new TimeSpan(0, 0, 60);
+					triggerTime = creationTime + new TimeSpan(0, 0, config.timeToDisasterLow);
+					disasterEffect = config.disasterEffectLow;
+
 					break;
 			}
 		}
 
-		public Plant damagePlant(Plant plant)
+		public Plant influencePlant(Plant plant)
 		{
-			// Reduziere Ressourcen von Pflanze
+			int newSun = 0;
+			int newWater = 0;
+
+			switch (disasterType)
+			{
+				case DisasterType.HEATWAVE:
+					newSun = plant.sunStorage + disasterEffect;
+					// Keine negativen Zahlen!
+					newWater = Math.Max(0, plant.waterStorage - disasterEffect);
+					plant = plant.withSun(newSun).withWater(newWater);
+					break;
+
+				case DisasterType.RAINFALL:
+					newSun = Math.Max(0, plant.sunStorage - disasterEffect);
+					newWater = plant.waterStorage + disasterEffect;
+					plant = plant.withSun(newSun).withWater(newWater);
+					break;
+			}
 			return plant;
 		}
 
-		public Field damageField(Field field)
+		public Field influenceField(Field field)
 		{
 			// Zerstöre unbepflanzte Felder
-			if (this.type == DisasterType.HEATWAVE)
+			if (disasterType == DisasterType.HEATWAVE)
 			{
 				switch (field.type)
 				{
@@ -61,14 +80,20 @@ namespace ForestSpirits.Business
 				}
 			}
 
+			// Regen
+			if (disasterType == DisasterType.RAINFALL)
+			{
+				// Pilze verbreiten sich?
+			}
+
 			return field;
 		}
 	}
 
 	public enum DisasterType
 	{
-		HEATWAVE,
-		RAINFALL
+		HEATWAVE = 1,
+		RAINFALL = 2
 	}
 
 	public enum DisasterIntensity
