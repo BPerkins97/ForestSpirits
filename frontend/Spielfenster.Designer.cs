@@ -278,9 +278,9 @@ namespace ForestSpirits.Frontend
 			this.lDisasterTypeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
 			this.lDisasterTypeText.Location = new System.Drawing.Point(4, 14);
 			this.lDisasterTypeText.Name = "lDisasterTypeText";
-			this.lDisasterTypeText.Size = new System.Drawing.Size(89, 15);
+			this.lDisasterTypeText.Size = new System.Drawing.Size(94, 15);
 			this.lDisasterTypeText.TabIndex = 13;
-			this.lDisasterTypeText.Text = "Katastrophe in:";
+			this.lDisasterTypeText.Text = "Katastrophenart";
 			// 
 			// lDisasterTypeWert
 			// 
