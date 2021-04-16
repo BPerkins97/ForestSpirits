@@ -58,10 +58,8 @@ const forestSpiritsAPI = {
             return false;
         }
 
-        console.log(fieldType);
         if (fieldType === forestSpiritsConstants.fieldTypes.normal || fieldType === forestSpiritsConstants.fieldTypes.halfRipe || fieldType === forestSpiritsConstants.fieldTypes.ripe) {
             this.gameState.fields[row][column].water += this.gameConfig.resourceRates.field.feed;
-            console.log(this.gameState.fields[row][column].water);
             this.gameState.fields[row][column].water = Math.min(100, this.gameState.fields[row][column].water);
             this.gameState.inventar.water--;
 
@@ -188,13 +186,13 @@ const forestSpiritsAPI = {
     expandCity: function() {
         for (let i=0;i<this.gameState.fields.length;i++) {
             for (let j=0;j<this.gameState.fields[i].length;j++) {
-                if (this.gameState.fields[i][j].type === "field-city") {
+                if (this.gameState.fields[i][j].type === forestSpiritsConstants.fieldTypes.city) {
                     if (i-1 >= 0) {
                         if (this.gameState.fields[i-1][j].type === forestSpiritsConstants.fieldTypes.normal) {
                             this.gameState.fields[i-1][j].type = forestSpiritsConstants.fieldTypes.city;
                             return;
                         }
-                        if (j+1 < FIELD_COLUMNS) {
+                        if (j+1 < this.gameConfig.boardSize.columns) {
                             if (this.gameState.fields[i-1][j+1].type === forestSpiritsConstants.fieldTypes.normal) {
                                 this.gameState.fields[i-1][j+1].type = forestSpiritsConstants.fieldTypes.city;
                                 return;
@@ -207,18 +205,18 @@ const forestSpiritsAPI = {
                             return;
                         }
                     }
-                    if (j+1 < FIELD_COLUMNS) {
+                    if (j+1 < this.gameConfig.boardSize.columns) {
                         if (this.gameState.fields[i][j+1].type === forestSpiritsConstants.fieldTypes.normal) {
                             this.gameState.fields[i][j-1].type = forestSpiritsConstants.fieldTypes.city;
                             return;
                         }
                     }
-                    if (i+1 < FIELD_ROWS) {
+                    if (i+1 < this.gameConfig.boardSize.rows) {
                         if (this.gameState.fields[i+1][j].type === forestSpiritsConstants.fieldTypes.normal) {
                             this.gameState.fields[i+1][j].type = forestSpiritsConstants.fieldTypes.city;
                             return;
                         }
-                        if (j+1 < FIELD_COLUMNS) {
+                        if (j+1 < this.gameConfig.boardSize.columns) {
                             if (this.gameState.fields[i+1][j+1].type === forestSpiritsConstants.fieldTypes.normal) {
                                 this.gameState.fields[i+1][j+1].type = forestSpiritsConstants.fieldTypes.city;
                                 return;
