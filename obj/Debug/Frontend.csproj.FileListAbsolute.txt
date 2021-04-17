@@ -1,0 +1,10 @@
+C:\Users\rebec\Desktop\Märi_Projekt\bin\Debug\Frontend.exe.config
+C:\Users\rebec\Desktop\Märi_Projekt\bin\Debug\Frontend.exe
+C:\Users\rebec\Desktop\Märi_Projekt\bin\Debug\Frontend.pdb
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.csprojAssemblyReference.cache
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\ForestSpirits.Frontend.Spielfenster.resources
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.Properties.Resources.resources
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.csproj.GenerateResource.cache
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.csproj.CoreCompileInputs.cache
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.exe
+C:\Users\rebec\Desktop\Märi_Projekt\obj\Debug\Frontend.pdb
