@@ -243,5 +243,40 @@ namespace ForestSpirits.Frontend
 		private void lDisasterWert_Click(object sender, EventArgs e)
 		{
 		}
-	}
+
+        private void lLastClickPixelsWert_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lLastClickPixelsText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lLastClickCoordinatesText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lLastClickCoordinatesWert_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lDebugInfoText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lCo2LevelText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
