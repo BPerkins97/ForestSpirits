@@ -277,7 +277,7 @@ namespace ForestSpirits.Business
 							{
 								auswahl.Add(new Coordinate(row - 1, column));
 							}
-							if (checkField(row - 1, column + 1) && gameState.fields[row + 1, column - 1].type == FieldType.NORMAL)
+							if (checkField(row + 1, column - 1) && gameState.fields[row + 1, column - 1].type == FieldType.NORMAL)
 							{
 								auswahl.Add(new Coordinate(row - 1, column + 1));
 							}
