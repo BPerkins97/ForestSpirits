@@ -15,7 +15,7 @@
 		public int co2Increase = 100;
 		public int co2UpdateValue = 0;
 		public double bucket;
-		public readonly int bucketFull = 60;
+		public readonly int bucketFull = 120;
 		public double wachstumsrate;
 		public double tiles = 1;
 		public double addToTiles = 0.15;
