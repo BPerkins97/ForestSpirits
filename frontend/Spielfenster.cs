@@ -106,7 +106,6 @@ namespace ForestSpirits.Frontend
 
 		private void onClick(object sender, MouseEventArgs e)
 		{
-			debugLastClick(e);
 			if (contextMenu != null)
 			{
 				this.Controls.Remove(contextMenu);
@@ -200,14 +199,6 @@ namespace ForestSpirits.Frontend
 			this.wasserNehmen = false;
 		}
 
-		private void debugLastClick(MouseEventArgs e)
-		{
-			// last click debug
-			lLastClickPixelsWert.Text = Convert.ToString(e.Location);
-			Coordinate coordinate = board.getCoordinates(e.X, e.Y);
-			lLastClickCoordinatesWert.Text = $"({coordinate.row}, {coordinate.column})";
-		}
-
 		private void start(object sender, EventArgs e)
 		{
 			game.start();
@@ -227,56 +218,5 @@ namespace ForestSpirits.Frontend
 		{
 			wasserNehmen = true;
 		}
-
-		private void lSpielzeitText_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void lCo2LevelWert_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void lDisasterText_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void lDisasterWert_Click(object sender, EventArgs e)
-		{
-		}
-
-        private void lLastClickPixelsWert_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lLastClickPixelsText_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lLastClickCoordinatesText_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lLastClickCoordinatesWert_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lDebugInfoText_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lCo2LevelText_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

@@ -317,7 +317,6 @@ namespace ForestSpirits.Business
 				.withFields(fields)
 				.withInventar(inventar)
 				.withDisaster(disaster, gameState.isDisasterComing);
-			Console.WriteLine("debug");
 		}
 
 		private bool checkField(int row, int column)
