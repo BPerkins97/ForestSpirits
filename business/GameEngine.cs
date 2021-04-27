@@ -165,7 +165,6 @@ namespace ForestSpirits.Business
 			if (config.co2UpdateValue > 0 || config.co2UpdateValue < 0)
 			{
 				gameState = gameState.withCo2(gameState.co2 + config.co2UpdateValue);
-				//Console.WriteLine(config.co2UpdateValue);
 			}
 
 			// Felder durchgehen
@@ -196,7 +195,7 @@ namespace ForestSpirits.Business
 							plant = plant
 								.withWater(amount);
 						}
-						if (plant.waterStorage == config.resourceMax && plant.sunStorage == config.resourceMax && plant.progress < config.resourceMax)
+						if (plant.waterStorage >= config.resourceMax && plant.sunStorage >= config.resourceMax && plant.progress < config.resourceMax)
 						{
 							int amount = plant.progress + config.resourceAdmissionRate;
 							amount = Math.Min(config.resourceMax, amount);
