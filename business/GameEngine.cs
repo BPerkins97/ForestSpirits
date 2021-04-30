@@ -67,14 +67,14 @@ namespace ForestSpirits.Business
 
 		public void feedSun(Coordinate location)
 		{
-			if (inventar.sun > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
+			if (inventar.sun > 0 && location.column >= 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
 			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
 				inventar = inventar.withSun(inventar.sun - 1);
 				updateFieldType(location);
 			}
-			else if (fields[location.row, location.column].type == FieldType.SEEDLING || fields[location.row, location.column].type == FieldType.TREE)
+			else if (location.column >= 0 && fields[location.row, location.column].type == FieldType.SEEDLING || location.column >= 0 && fields[location.row, location.column].type == FieldType.TREE)
 			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withSunStorage(fields[location.row, location.column].sunStorage + 1);
@@ -96,14 +96,14 @@ namespace ForestSpirits.Business
 
 		public void feedWater(Coordinate location)
 		{
-			if (inventar.water > 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
+			if (inventar.water > 0 && location.column >= 0 && fields[location.row, location.column].type != FieldType.SEEDLING)
 			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withWaterStorage(fields[location.row, location.column].waterStorage + 1);
 				inventar = inventar.withWater(inventar.water - 1);
 				updateFieldType(location);
 			}
-			else if (fields[location.row, location.column].type == FieldType.SEEDLING || fields[location.row, location.column].type == FieldType.TREE)
+			else if (location.column >= 0 && fields[location.row, location.column].type == FieldType.SEEDLING || location.column >= 0 && fields[location.row, location.column].type == FieldType.TREE)
 			{
 				fields[location.row, location.column] = fields[location.row, location.column]
 					.withWaterStorage(fields[location.row, location.column].waterStorage + 1);
@@ -278,7 +278,7 @@ namespace ForestSpirits.Business
 							}
 							if (checkField(row + 1, column - 1) && gameState.fields[row + 1, column - 1].type == FieldType.NORMAL)
 							{
-								auswahl.Add(new Coordinate(row - 1, column + 1));
+								auswahl.Add(new Coordinate(row + 1, column - 1));
 							}
 							if (checkField(row, column + 1) && gameState.fields[row, column + 1].type == FieldType.NORMAL)
 							{

@@ -18,7 +18,7 @@
 		public readonly int bucketFull = 120;
 		public double wachstumsrate;
 		public double tiles = 1;
-		public double addToTiles = 0.15;
+		public double addToTiles = 0.35;
 
 		// Disasters
 		public readonly int disasterEffectHigh = 50;
