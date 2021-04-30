@@ -56,6 +56,11 @@ namespace ForestSpirits.Business
 
 		public void setzlingPflanzen(Coordinate location)
 		{
+			if (location.row < 0 || location.column < 0)
+			{
+				return;
+			}
+
 			if (inventar.seedlings > 0 && fields[location.row, location.column].type == FieldType.HIGH)
 			{
 				inventar = inventar.withSeedlings(inventar.seedlings - 1);
@@ -256,11 +261,16 @@ namespace ForestSpirits.Business
 				gameState.isDisasterComing = true;
 			}
 
-			if (gameState.isDisasterComing && disaster.wasTriggered)
+			if (gameState.co2 < co2Low && !gameState.isDisasterComing)
 			{
-				gameState.isDisasterComing = false;
 				disaster = new Disaster();
 			}
+
+			//if (gameState.isDisasterComing && disaster.wasTriggered)
+			//{
+			//	gameState.isDisasterComing = false;
+			//	disaster = new Disaster();
+			//}
 
 			if (Stadt.wachstum())
 			{
